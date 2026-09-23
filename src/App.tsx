@@ -3,44 +3,56 @@ import RevealObserver from "./components/RevealObserver";
 import QuoteForm from "./components/QuoteForm";
 import TestimonialsCarousel from "./components/TestimonialsCarousel";
 import { asset } from "./asset";
+import ServiceModal from "./components/ServiceModal";
+import { useState } from "react";
 
 const WHATSAPP_HREF =
   "https://wa.me/5521993232702?text=Ol%C3%A1!%20Visitei%20o%20site%20da%20Bihel%20Engenharia%20e%20gostaria%20de%20solicitar%20um%20or%C3%A7amento.";
 
+// `details` é o texto completo mostrado no modal ao clicar no card. Por ora
+// repete `desc` como placeholder — troque pelo texto definitivo de cada
+// serviço quando ele chegar.
 const SERVICES = [
   {
     title: "Acompanhamento de Contratos",
     desc: "Para que seus projetos sejam executados dentro do prazo e do orçamento acordados.",
+    details: "Para que seus projetos sejam executados dentro do prazo e do orçamento acordados.",
     img: asset("assets/Acompanhamento-de-Contratos.webp"),
   },
   {
     title: "Consultoria Técnica",
     desc: "Projetada para atender às necessidades específicas de síndicos, administradores e proprietários de imóveis.",
+    details: "Projetada para atender às necessidades específicas de síndicos, administradores e proprietários de imóveis.",
     img: asset("assets/Consultoria-Tecnica-768x433.webp"),
   },
   {
     title: "Perícias de Engenharia e Assistência Técnica Judicial",
     desc: "Análises técnicas precisas e imparciais para auxiliar na resolução de litígios e questões legais.",
+    details: "Análises técnicas precisas e imparciais para auxiliar na resolução de litígios e questões legais.",
     img: asset("assets/Pericias-de-Engenharia-e-Assistencia-Tecnica-Judicial-768x433.webp"),
   },
   {
     title: "Laudo de Autovistoria",
     desc: "Atendendo plenamente às exigências da Lei 6.400/2013 do estado do Rio de Janeiro.",
+    details: "Atendendo plenamente às exigências da Lei 6.400/2013 do estado do Rio de Janeiro.",
     img: asset("assets/Laudo-de-autovistoria-768x433.webp"),
   },
   {
     title: "Inspeção Predial",
     desc: "Visando garantir a segurança, funcionalidade e longevidade das edificações.",
+    details: "Visando garantir a segurança, funcionalidade e longevidade das edificações.",
     img: asset("assets/Inspecao-Predial-768x433.webp"),
   },
   {
     title: "Elaboração de Projetos",
     desc: "Nossa expertise em desenvolvimento de projetos de engenharia e arquitetura transforma visões em realidade.",
+    details: "Nossa expertise em desenvolvimento de projetos de engenharia e arquitetura transforma visões em realidade.",
     img: asset("assets/Elaboracao-de-projetos-768x433.jpg"),
   },
   {
     title: "Gerenciamento e Fiscalização de Obras",
     desc: "Seu projeto executado com excelência, dentro do prazo e orçamento estabelecidos.",
+    details: "Seu projeto executado com excelência, dentro do prazo e orçamento estabelecidos.",
     img: asset("assets/Gerenciamento-e-fiscalizacao-de-obras-768x433.webp"),
   },
 ] as const;
@@ -91,6 +103,13 @@ const TESTIMONIALS = [
 ] as const;
 
 export default function App() {
+  const [selectedServiceTitle, setSelectedServiceTitle] = useState<string | null>(null);
+  const selectedService = SERVICES.find((s) => s.title === selectedServiceTitle) ?? null;
+
+  function handleRequestQuote(title: string) {
+    window.location.href = `${import.meta.env.BASE_URL}?service=${encodeURIComponent(title)}#orcamento`;
+  }
+
   return (
     <div className="landing">
 
@@ -100,7 +119,7 @@ export default function App() {
         {/* HERO */}
         <section className="hero">
           <div className="container hero__inner">
-            <div className="hero__content reveal">
+            <div className="hero__content hero-in">
               <span className="eyebrow">Engenharia para condomínios em Niterói</span>
               <h1>Segurança e transparência para o seu condomínio, do laudo à obra.</h1>
               <p className="hero__lead">
@@ -117,7 +136,7 @@ export default function App() {
                 </a>
               </div>
             </div>
-            <div className="hero__media reveal">
+            <div className="hero__media hero-media-in">
               <div className="hero__blob"></div>
               <img
                 src={asset("assets/Esboco-Predios-768x466.webp")}
@@ -202,11 +221,13 @@ export default function App() {
             </div>
 
             <div className="services__grid">
-              {SERVICES.map((service) => (
-                <a
+              {SERVICES.map((service, i) => (
+                <button
                   key={service.title}
+                  type="button"
                   className="service-card reveal"
-                  href={`${import.meta.env.BASE_URL}?service=${encodeURIComponent(service.title)}#orcamento`}
+                  style={{ transitionDelay: `${Math.min(i, 5) * 60}ms` }}
+                  onClick={() => setSelectedServiceTitle(service.title)}
                 >
                   <div className="service-card__img">
                     <img src={service.img} alt={service.title} width={768} height={433} loading="lazy" />
@@ -214,9 +235,9 @@ export default function App() {
                   <div className="service-card__body">
                     <h3>{service.title}</h3>
                     <p>{service.desc}</p>
-                    <span className="service-card__link">Solicitar orçamento →</span>
+                    <span className="service-card__link">Ver detalhes →</span>
                   </div>
-                </a>
+                </button>
               ))}
             </div>
           </div>
@@ -368,6 +389,12 @@ export default function App() {
       </a>
 
       <RevealObserver />
+
+      <ServiceModal
+        service={selectedService}
+        onClose={() => setSelectedServiceTitle(null)}
+        onRequestQuote={handleRequestQuote}
+      />
     </div>
   );
 }
