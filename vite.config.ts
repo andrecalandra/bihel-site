@@ -3,7 +3,8 @@ import { defineConfig } from 'vite'
 
 // https://vite.dev/config/
 export default defineConfig({
-  // Site de projeto do GitHub Pages fica em /<repo>/, não na raiz.
-  base: '/bihel-site/',
+  // Caminho relativo: funciona tanto no GitHub Pages (serve em /bihel-site/)
+  // quanto na Vercel (serve na raiz do domínio), sem precisar escolher um.
+  base: './',
   plugins: [react()],
 })
