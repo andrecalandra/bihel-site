@@ -401,7 +401,9 @@ export default function App() {
   const selectedService = SERVICES.find((s) => s.title === selectedServiceTitle) ?? null;
 
   function handleRequestQuote(title: string) {
-    window.location.href = `${import.meta.env.BASE_URL}?service=${encodeURIComponent(title)}#orcamento`;
+    const message = `Olá! Tenho interesse no serviço de ${title} e gostaria de solicitar um orçamento.`;
+    window.open(`https://wa.me/5521993232702?text=${encodeURIComponent(message)}`, "_blank", "noopener,noreferrer");
+    setSelectedServiceTitle(null);
   }
 
   return (
@@ -422,7 +424,12 @@ export default function App() {
                 proprietários com suporte técnico claro em cada etapa.
               </p>
               <div className="hero__actions">
-                <a className="btn btn--primary btn--lg" href="#orcamento">
+                <a
+                  className="btn btn--primary btn--lg"
+                  href={WHATSAPP_HREF}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
                   Solicitar orçamento
                 </a>
                 <a className="btn btn--ghost btn--lg" href="#servicos">
@@ -613,9 +620,6 @@ export default function App() {
                   <svg viewBox="0 0 24 24"><path d="M9 16.2 4.8 12l-1.4 1.4L9 19 21 7l-1.4-1.4L9 16.2Z" /></svg>
                   Direto pelo WhatsApp, sem burocracia
                 </div>
-                <a className="btn btn--ghost" href={WHATSAPP_HREF} target="_blank" rel="noopener noreferrer">
-                  Prefiro falar no WhatsApp
-                </a>
               </div>
               <QuoteForm
                 whatsappNumber="5521993232702"

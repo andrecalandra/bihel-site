@@ -39,7 +39,7 @@ export default function SiteHeader() {
             alt="Bihel Engenharia"
             width={260}
             height={175}
-            style={{ height: 88, width: "auto" }}
+            style={{ height: 108, width: "auto" }}
           />
         </a>
 
