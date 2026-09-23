@@ -9,50 +9,344 @@ import { useState } from "react";
 const WHATSAPP_HREF =
   "https://wa.me/5521993232702?text=Ol%C3%A1!%20Visitei%20o%20site%20da%20Bihel%20Engenharia%20e%20gostaria%20de%20solicitar%20um%20or%C3%A7amento.";
 
-// `details` é o texto completo mostrado no modal ao clicar no card. Por ora
-// repete `desc` como placeholder — troque pelo texto definitivo de cada
-// serviço quando ele chegar.
+// `details` é o texto completo mostrado no modal ao clicar no card.
 const SERVICES = [
   {
     title: "Acompanhamento de Contratos",
     desc: "Para que seus projetos sejam executados dentro do prazo e do orçamento acordados.",
-    details: "Para que seus projetos sejam executados dentro do prazo e do orçamento acordados.",
+    details: `Nosso serviço abrangente inclui:
+
+Análise Inicial de Contratos
+* Revisão detalhada de cláusulas técnicas e comerciais
+* Identificação de possíveis riscos e inconsistências
+* Sugestões de melhorias e ajustes para proteção dos interesses do cliente
+* Verificação da conformidade com normas técnicas e legislação vigente
+
+Acompanhamento Contínuo
+* Monitoramento regular do cumprimento das cláusulas contratuais
+* Verificação da qualidade e conformidade dos serviços prestados
+* Acompanhamento de cronogramas e prazos estabelecidos
+* Avaliação de solicitações de aditivos e alterações contratuais
+
+Suporte Técnico-Jurídico
+* Assessoria na interpretação de cláusulas técnicas complexas
+* Apoio na resolução de conflitos e disputas contratuais
+* Orientação sobre direitos e obrigações das partes envolvidas
+* Elaboração de pareceres técnicos para suporte em negociações
+
+Gestão de Documentação
+* Organização e controle de documentos técnicos relacionados ao contrato
+* Manutenção de registros atualizados de todas as comunicações relevantes
+* Elaboração de relatórios periódicos sobre o andamento do contrato
+
+Avaliação de Desempenho
+* Análise do desempenho dos fornecedores e prestadores de serviços
+* Verificação do cumprimento de metas e indicadores de qualidade
+* Recomendações para melhoria contínua e otimização de processos
+
+Nossa Abordagem
+1. Análise Inicial: Estudo aprofundado do contrato e das necessidades específicas do cliente.
+2. Planejamento Estratégico: Desenvolvimento de um plano de acompanhamento personalizado.
+3. Monitoramento Contínuo: Acompanhamento regular e proativo do contrato.
+4. Comunicação Eficiente: Relatórios claros e objetivos sobre o andamento do contrato.
+5. Ação Preventiva: Identificação antecipada de potenciais problemas e proposição de soluções.
+6. Suporte Especializado: Assistência técnica e jurídica sempre que necessário.
+
+Por que Escolher a Bihel Engenharia?
+* Expertise Multidisciplinar: Nossa equipe combina conhecimentos em engenharia e direito contratual.
+* Experiência Comprovada: Vasta experiência no acompanhamento de contratos técnicos complexos.
+* Abordagem Proativa: Foco na prevenção de problemas e otimização de resultados.
+* Tecnologia Avançada: Utilização de software especializado para gestão e acompanhamento de contratos.
+* Personalização: Serviços adaptados às necessidades específicas de cada cliente e projeto.
+* Compromisso com a Excelência: Busca constante pela satisfação do cliente e pelo sucesso do projeto.
+
+Na Bihel Engenharia, entendemos que contratos bem gerenciados são fundamentais para o sucesso de qualquer empreendimento. Nosso serviço de acompanhamento de contratos visa não apenas garantir o cumprimento das obrigações contratuais, mas também otimizar resultados e proteger os interesses de nossos clientes.
+
+Conte com a Bihel Engenharia para uma gestão eficiente e segura dos seus contratos técnicos. Entre em contato conosco hoje e descubra como podemos agregar valor ao seu projeto através de um acompanhamento contratual especializado e de alta qualidade.`,
     img: asset("assets/Acompanhamento-de-Contratos.webp"),
   },
   {
     title: "Consultoria Técnica",
     desc: "Projetada para atender às necessidades específicas de síndicos, administradores e proprietários de imóveis.",
-    details: "Projetada para atender às necessidades específicas de síndicos, administradores e proprietários de imóveis.",
+    details: `Na Bihel Engenharia, oferecemos uma gama abrangente de serviços de consultoria técnica, projetados para atender às necessidades específicas de síndicos, administradores e proprietários de imóveis. Nossa expertise técnica e abordagem inovadora garantem soluções eficazes e personalizadas para cada cliente.
+
+Nossos Serviços
+
+Suporte Mensal à Gestão de Condomínios
+Oferecemos suporte contínuo e especializado para síndicos e administradores na gestão de condomínios edilícios, incluindo:
+* Assessoria técnica em decisões de manutenção e melhorias
+* Orientação sobre conformidade com normas e legislações
+* Apoio na elaboração de planos de manutenção preventiva
+* Assistência na avaliação de propostas de fornecedores
+
+Inspeção de Fachadas com Drone
+Realizamos inspeções detalhadas de fachadas utilizando aeronaves não tripuladas (drones), oferecendo:
+* Identificação precisa de manifestações patológicas
+* Análise das causas de problemas estruturais e estéticos
+* Utilização de câmeras termográficas para detecção de infiltrações e outros problemas ocultos
+* Acesso seguro a áreas de difícil alcance
+* Relatórios detalhados com imagens de alta resolução
+
+Elaboração de Programa de Manutenção
+Desenvolvemos documentação técnica completa para atendimento à NBR 5.674, incluindo:
+* Estabelecimento de prazos para manutenções periódicas
+* Detalhamento das manutenções necessárias e suas frequências
+* Criação de cronogramas personalizados para cada edificação
+* Orientações para garantir o pleno funcionamento e longevidade da edificação
+
+Laudo de Recebimento de Obras
+Realizamos inspeções técnicas minuciosas em construções recém-entregues, verificando:
+* Conformidade com os projetos originais
+* Identificação de problemas construtivos e falhas de execução
+* Avaliação de possíveis riscos para os ocupantes
+* Elaboração de relatório detalhado com recomendações
+
+Laudo de Garantia de Obras
+Oferecemos inspeções prediais especializadas para identificar:
+* Falhas construtivas aparentes
+* Vícios redibitórios (ocultos) na construção
+* Análise da conformidade com as garantias oferecidas pela construtora
+* Recomendações para correções e melhorias necessárias
+
+Nossa Abordagem
+1. Avaliação Inicial: Análise detalhada das necessidades específicas do cliente e da edificação.
+2. Planejamento Personalizado: Desenvolvimento de um plano de ação customizado.
+3. Execução Técnica: Realização de inspeções, análises e elaboração de documentação com rigor técnico.
+4. Relatórios Claros: Produção de relatórios detalhados e de fácil compreensão.
+5. Suporte Contínuo: Acompanhamento e orientação na implementação das recomendações.
+
+Por que Escolher a Bihel Engenharia?
+* Expertise Multidisciplinar: Equipe de engenheiros especializados em diversas áreas da construção civil.
+* Tecnologia de Ponta: Utilização de drones, câmeras termográficas e software avançado para diagnósticos precisos.
+* Conformidade Normativa: Conhecimento aprofundado das normas técnicas e legislações pertinentes.
+* Atendimento Personalizado: Soluções adaptadas às necessidades específicas de cada cliente e edificação.
+* Compromisso com a Qualidade: Foco na excelência técnica e na satisfação do cliente.
+
+Na Bihel Engenharia, nossa missão é proporcionar tranquilidade e segurança aos nossos clientes através de consultorias técnicas de alta qualidade. Seja para a gestão eficiente de condomínios, inspeções especializadas ou elaboração de documentação técnica, estamos preparados para atender às suas necessidades com excelência e profissionalismo.
+
+Entre em contato conosco hoje para descobrir como nossa consultoria técnica pode agregar valor ao seu empreendimento e garantir a longevidade e segurança da sua edificação.`,
     img: asset("assets/Consultoria-Tecnica-768x433.webp"),
   },
   {
     title: "Perícias de Engenharia e Assistência Técnica Judicial",
     desc: "Análises técnicas precisas e imparciais para auxiliar na resolução de litígios e questões legais.",
-    details: "Análises técnicas precisas e imparciais para auxiliar na resolução de litígios e questões legais.",
+    details: `Na Bihel Engenharia, oferecemos serviços especializados em perícias de engenharia e assistência técnica judicial, proporcionando análises técnicas precisas e imparciais para auxiliar na resolução de litígios e questões legais relacionadas à engenharia.
+
+Nossos Serviços
+
+Perícias de Engenharia
+Realizamos perícias técnicas abrangentes em diversas áreas da engenharia, incluindo:
+* Avaliação de patologias construtivas
+* Análise de acidentes em obras
+* Verificação de conformidade com normas técnicas
+* Avaliação de danos estruturais
+* Perícias em instalações elétricas e hidráulicas
+* Análise de problemas em fundações e contenções
+* Avaliação de impactos ambientais em obras
+
+Assistência Técnica Judicial
+Oferecemos suporte técnico especializado para processos judiciais, incluindo:
+* Elaboração de laudos periciais
+* Assistência técnica a advogados em casos de engenharia
+* Participação em audiências como perito assistente
+* Esclarecimentos técnicos em questões judiciais
+* Contraprovas técnicas em processos litigiosos
+
+Nossa Abordagem
+1. Análise Inicial: Avaliação detalhada do caso e das necessidades específicas.
+2. Planejamento: Desenvolvimento de um plano de ação personalizado.
+3. Coleta de Dados: Realização de vistorias, medições e coleta de evidências.
+4. Análise Técnica: Estudo aprofundado dos dados coletados.
+5. Elaboração do Laudo: Produção de um relatório técnico detalhado e objetivo.
+6. Apresentação: Exposição clara dos resultados, incluindo suporte em audiências quando necessário.
+
+Por que Escolher a Bihel Engenharia?
+1. Expertise Multidisciplinar: Nossa equipe é composta por engenheiros especializados em diversas áreas, garantindo uma análise abrangente e precisa.
+2. Imparcialidade e Ética: Mantemos um compromisso inabalável com a verdade técnica e a ética profissional.
+3. Experiência Judicial: Vasta experiência em processos judiciais e conhecimento das necessidades específicas do ambiente legal.
+4. Tecnologia Avançada: Utilizamos equipamentos e software de ponta para análises precisas e não invasivas.
+5. Laudos Claros e Objetivos: Nossos relatórios são elaborados de forma clara, detalhada e fundamentada, facilitando a compreensão por parte de juízes, advogados e partes envolvidas.
+6. Cumprimento de Prazos: Entendemos a importância dos prazos judiciais e nos comprometemos a cumpri-los rigorosamente.
+7. Suporte Contínuo: Oferecemos assistência completa durante todo o processo judicial, incluindo esclarecimentos e defesa do laudo pericial.
+
+Áreas de Atuação
+* Construção Civil
+* Engenharia Estrutural
+* Engenharia Elétrica
+* Engenharia Hidráulica
+* Engenharia Ambiental
+* Engenharia de Segurança do Trabalho
+* Avaliações e Perícias Imobiliárias
+
+Na Bihel Engenharia, combinamos conhecimento técnico aprofundado com experiência jurídica para fornecer perícias e assistência técnica judicial de alta qualidade. Nosso objetivo é contribuir para a elucidação de questões técnicas complexas, auxiliando na busca pela justiça e resolução adequada de litígios.
+
+Conte com a Bihel Engenharia para perícias de engenharia precisas e assistência técnica judicial confiável. Entre em contato conosco para discutir como podemos ajudar no seu caso.`,
     img: asset("assets/Pericias-de-Engenharia-e-Assistencia-Tecnica-Judicial-768x433.webp"),
   },
   {
     title: "Laudo de Autovistoria",
     desc: "Atendendo plenamente às exigências da Lei 6.400/2013 do estado do Rio de Janeiro.",
-    details: "Atendendo plenamente às exigências da Lei 6.400/2013 do estado do Rio de Janeiro.",
+    details: `Na Bihel Engenharia, oferecemos serviços especializados na realização de Laudos de Autovistoria, atendendo plenamente às exigências da Lei 6.400/2013 do estado do Rio de Janeiro e às leis municipais complementares. Nosso compromisso é garantir a segurança e a conformidade legal das edificações, proporcionando tranquilidade aos proprietários e gestores de imóveis.
+
+O que é o Laudo de Autovistoria?
+O Laudo de Autovistoria é um documento técnico que atesta as condições de conservação, estabilidade e segurança de uma edificação. Este laudo é obrigatório no estado do Rio de Janeiro, conforme estabelecido pela Lei 6.400/2013, e visa prevenir acidentes e garantir a integridade estrutural dos imóveis.
+
+Nossos Serviços
+
+Vistoria Técnica Abrangente
+* Inspeção detalhada de todos os sistemas e estruturas do edifício
+* Avaliação de elementos estruturais, fachadas, instalações elétricas e hidráulicas
+* Verificação de condições de segurança contra incêndio e pânico
+* Análise de acessibilidade e condições gerais de uso da edificação
+
+Elaboração do Laudo Técnico
+* Relatório detalhado das condições encontradas
+* Registro fotográfico das inspeções realizadas
+* Identificação de não conformidades e problemas estruturais
+* Recomendações técnicas para correções e melhorias necessárias
+
+Conformidade Legal
+* Atendimento integral às exigências da Lei 6.400/2013 do Rio de Janeiro
+* Observância às leis municipais complementares específicas de cada localidade
+* Garantia de que o laudo cumpre todos os requisitos legais e técnicos exigidos
+
+Suporte Pós-Laudo
+* Orientação para implementação das recomendações do laudo
+* Assistência na interação com órgãos fiscalizadores, se necessário
+* Acompanhamento para garantir que as medidas corretivas sejam adequadamente implementadas
+
+Por que Escolher a Bihel Engenharia?
+1. Expertise Técnica: Nossa equipe é composta por engenheiros altamente qualificados e experientes em vistorias prediais.
+2. Conhecimento Legislativo: Mantemo-nos atualizados sobre todas as legislações pertinentes, garantindo laudos sempre em conformidade.
+3. Tecnologia Avançada: Utilizamos equipamentos de última geração para diagnósticos precisos e não invasivos.
+4. Relatórios Claros e Objetivos: Nossos laudos são elaborados de forma clara e compreensível, facilitando a tomada de decisões.
+5. Compromisso com a Segurança: Priorizamos a segurança dos ocupantes e a integridade da edificação em todas as nossas avaliações.
+6. Atendimento Personalizado: Oferecemos soluções adaptadas às necessidades específicas de cada edificação e cliente.
+
+Na Bihel Engenharia, não apenas cumprimos a lei, mas também nos empenhamos em proporcionar segurança e tranquilidade aos nossos clientes. Conte conosco para realizar o Laudo de Autovistoria da sua edificação com excelência técnica e total conformidade legal.
+
+Garanta a segurança da sua edificação e a conformidade com a legislação. Entre em contato conosco hoje para agendar seu Laudo de Autovistoria!`,
     img: asset("assets/Laudo-de-autovistoria-768x433.webp"),
   },
   {
     title: "Inspeção Predial",
     desc: "Visando garantir a segurança, funcionalidade e longevidade das edificações.",
-    details: "Visando garantir a segurança, funcionalidade e longevidade das edificações.",
+    details: `Na Bihel Engenharia, oferecemos serviços especializados de inspeção predial para garantir a segurança, funcionalidade e longevidade das edificações. Nossa equipe de engenheiros altamente qualificados realiza avaliações minuciosas para identificar e prevenir problemas estruturais e de manutenção.
+
+Avaliação do Estado de Conservação
+Nosso serviço de inspeção predial inclui uma avaliação abrangente do estado de conservação das edificações, fornecendo:
+* Identificação detalhada de manifestações patológicas existentes
+* Análise das causas subjacentes aos problemas identificados
+* Recomendações de tratativas e soluções adequadas
+* Elaboração de relatório técnico completo e acessível
+
+Relatório Técnico Detalhado
+Após a inspeção, fornecemos um relatório técnico abrangente que inclui:
+1. Descrição das condições gerais da edificação
+2. Detalhamento das manifestações patológicas encontradas
+3. Análise das possíveis causas de cada problema
+4. Recomendações de tratativas e reparos necessários
+5. Priorização das intervenções recomendadas
+6. Estimativas de custos para as reparações sugeridas
+
+Análise de Documentação NBR 16.280
+Oferecemos serviços especializados de análise de documentação conforme a NBR 16.280, que inclui:
+* Verificação da conformidade dos documentos com as normas vigentes
+* Identificação de possíveis não conformidades ou lacunas na documentação
+* Recomendações para adequação e compliance
+
+Suporte Técnico para Reformas em Condomínios
+Prestamos suporte técnico abrangente a síndicos, administradoras e condomínios, abrangendo:
+* Análise detalhada de projetos de reforma propostos por condôminos
+* Avaliação da viabilidade técnica e impacto das reformas na estrutura do edifício
+* Aprovação de projetos que atendam às normas e regulamentações
+* Acompanhamento técnico durante a execução das obras
+* Garantia de que as reformas não comprometam a integridade estrutural ou estética do condomínio
+
+Nossos Diferenciais
+* Expertise Técnica: Nossa equipe possui ampla experiência em inspeções prediais e conhecimento atualizado das normas técnicas.
+* Tecnologia Avançada: Utilizamos equipamentos de ponta para diagnósticos precisos e não invasivos.
+* Abordagem Preventiva: Identificamos problemas potenciais antes que se tornem críticos, economizando custos a longo prazo.
+* Relatórios Claros e Acionáveis: Fornecemos recomendações práticas e priorizadas para facilitar a tomada de decisões.
+* Suporte Contínuo: Oferecemos acompanhamento e orientação durante todo o processo de reparos e reformas.
+
+Na Bihel Engenharia, nossa missão é garantir a segurança, o conforto e a valorização do seu patrimônio imobiliário. Conte conosco para uma inspeção predial minuciosa e profissional que trará tranquilidade e economia a longo prazo.`,
     img: asset("assets/Inspecao-Predial-768x433.webp"),
   },
   {
     title: "Elaboração de Projetos",
     desc: "Nossa expertise em desenvolvimento de projetos de engenharia e arquitetura transforma visões em realidade.",
-    details: "Nossa expertise em desenvolvimento de projetos de engenharia e arquitetura transforma visões em realidade.",
+    details: `Na Bihel Engenharia, nossa expertise em desenvolvimento de projetos de engenharia e arquitetura transforma visões em realidade. Oferecemos soluções personalizadas e inovadoras para atender às necessidades específicas de cada cliente.
+
+Desenvolvimento de Projetos de Engenharia e Arquitetura
+Nossa equipe multidisciplinar de engenheiros e arquitetos trabalha em sinergia para oferecer projetos abrangentes e integrados, que incluem:
+
+Projetos de Engenharia
+* Projetos Estruturais
+* Projetos Hidráulicos
+* Projetos Elétricos
+* Projetos de HVAC (Aquecimento, Ventilação e Ar Condicionado)
+* Projetos de Automação e Controle
+* Projetos de Eficiência Energética
+* Projetos de Telecomunicações
+
+Projetos de Arquitetura
+* Projetos Arquitetônicos Residenciais
+* Projetos Arquitetônicos Comerciais
+* Projetos de Interiores
+* Projetos de Paisagismo
+* Projetos de Reformas e Retrofits
+* Projetos de Acessibilidade
+
+Nossa Abordagem
+1. Análise de Requisitos: Compreendemos profundamente as necessidades e expectativas do cliente.
+2. Concepção: Desenvolvemos conceitos inovadores alinhados com os objetivos do projeto.
+3. Detalhamento: Elaboramos projetos detalhados, incluindo plantas, cortes, elevações e especificações técnicas.
+4. Compatibilização: Garantimos a integração harmoniosa entre todas as disciplinas do projeto.
+5. Otimização: Buscamos soluções que maximizem eficiência, sustentabilidade e custo-benefício.
+6. Documentação: Preparamos toda a documentação necessária para aprovações e execução.
+
+Diferenciais Bihel
+* Inovação: Utilizamos as mais recentes tecnologias e metodologias de projeto, incluindo BIM (Building Information Modeling).
+* Sustentabilidade: Integramos princípios de construção verde e eficiência energética em todos os nossos projetos.
+* Conformidade: Garantimos que todos os projetos atendam às normas da ABNT, legislações locais e padrões internacionais de qualidade.
+* Flexibilidade: Adaptamos nossa abordagem para atender às especificidades de cada projeto, seja ele de pequena, média ou grande escala.
+
+Na Bihel Engenharia, não apenas elaboramos projetos, mas criamos soluções que inspiram, funciona e perduram. Conte conosco para transformar suas ideias em projetos excepcionais que superam expectativas e estabelecem novos padrões de excelência em engenharia e arquitetura.`,
     img: asset("assets/Elaboracao-de-projetos-768x433.jpg"),
   },
   {
     title: "Gerenciamento e Fiscalização de Obras",
     desc: "Seu projeto executado com excelência, dentro do prazo e orçamento estabelecidos.",
-    details: "Seu projeto executado com excelência, dentro do prazo e orçamento estabelecidos.",
+    details: `Na Bihel Engenharia, oferecemos serviços especializados em gerenciamento e fiscalização de obras, garantindo que seu projeto seja executado com excelência, dentro do prazo e orçamento estabelecidos. Nossa expertise abrange:
+
+Elaboração de Escopo
+Desenvolvemos um escopo detalhado e preciso para seu projeto, assegurando que todas as necessidades sejam atendidas e que haja uma base sólida para as fases subsequentes.
+
+Documentação Técnica para Contratação
+Preparamos toda a documentação técnica necessária para a contratação de serviços de terceiros, garantindo clareza e conformidade com as exigências do seu projeto.
+
+Licitação de Obras
+Conduzimos processos licitatórios completos, baseados em:
+* Documentos técnicos rigorosos
+* Necessidades específicas do cliente
+* Análise criteriosa do mercado
+
+Nosso objetivo é identificar e contratar a empresa de engenharia que ofereça a melhor relação custo-benefício e possua a expertise necessária para o escopo desenvolvido.
+
+Equalização de Propostas
+Realizamos uma verificação minuciosa das propostas técnicas apresentadas por empresas terceiras, com foco em:
+* Equalização dos escopos ofertados
+* Análise comparativa de preços
+* Apresentação ao cliente da proposta com o melhor custo-benefício
+
+Gerenciamento e Fiscalização de Obras
+Oferecemos um serviço abrangente de acompanhamento e fiscalização de obras realizadas por terceiros, que inclui:
+* Constatação da execução conforme o projeto e cronograma
+* Verificação do cumprimento das boas práticas de engenharia
+* Garantia de conformidade com normas da ABNT, CBMERJ e legislação vigente
+
+Na Bihel Engenharia, nosso compromisso é assegurar que seu projeto seja executado com a mais alta qualidade, eficiência e segurança. Conte conosco para transformar seus planos em realidade.`,
     img: asset("assets/Gerenciamento-e-fiscalizacao-de-obras-768x433.webp"),
   },
 ] as const;
