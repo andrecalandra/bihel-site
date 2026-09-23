@@ -2,7 +2,7 @@ import { useState, type FormEvent } from "react";
 
 type Status = "idle" | "redirecting";
 
-/** Monta a mensagem e abre o WhatsApp já preenchido — sem back-end envolvido. */
+/** Monta a mensagem e abre o WhatsApp já preenchido sem back-end envolvido. */
 function buildWhatsAppUrl(whatsappNumber: string, data: FormData) {
   const name = String(data.get("name") || "").trim();
   const phone = String(data.get("phone") || "").trim();
@@ -92,7 +92,7 @@ export default function QuoteForm({
 
       {status === "redirecting" && (
         <p className="form-feedback form-feedback--success">
-          Abrimos o WhatsApp numa nova aba com sua mensagem pronta — é só enviar.
+          Abrimos o WhatsApp numa nova aba com sua mensagem pronta é só enviar.
         </p>
       )}
     </form>

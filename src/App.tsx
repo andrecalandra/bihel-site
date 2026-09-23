@@ -419,7 +419,7 @@ export default function App() {
               <p className="hero__lead">
                 A Bihel Engenharia oferece consultoria técnica, inspeção predial, laudos de
                 autovistoria e gerenciamento de obras para síndicos, administradoras e
-                proprietários — com suporte técnico claro em cada etapa.
+                proprietários com suporte técnico claro em cada etapa.
               </p>
               <div className="hero__actions">
                 <a className="btn btn--primary btn--lg" href="#orcamento">
