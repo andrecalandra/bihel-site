@@ -642,14 +642,27 @@ body {
   font-size: 0.85rem;
   opacity: 0.7;
 }
-.footer__admin-link {
-  opacity: 0.65;
-  font-size: 0.82rem;
-  margin-left: 12px;
-  text-decoration: underline;
-  transition: opacity .2s ease;
+/* .footer .footer__admin-link (2 classes) em vez de 1: precisa bater a
+   especificidade de ".landing a { color: inherit }", senão o inherit vence. */
+.footer .footer__admin-link {
+  display: inline-block;
+  margin-left: 14px;
+  padding: 6px 16px;
+  border-radius: 999px;
+  background: linear-gradient(135deg, var(--gold-light), var(--gold));
+  color: var(--navy-900);
+  font-family: var(--ff-heading);
+  font-weight: 600;
+  font-size: 0.78rem;
+  text-decoration: none;
+  box-shadow: 0 6px 16px rgba(217, 164, 65, 0.3);
+  transition: transform .2s ease, box-shadow .2s ease;
 }
-.footer__admin-link:hover { opacity: 1; color: var(--gold-light); }
+.footer .footer__admin-link:hover {
+  color: var(--navy-900);
+  transform: translateY(-2px);
+  box-shadow: 0 10px 22px rgba(217, 164, 65, 0.4);
+}
 
 /* ---------- WhatsApp float ---------- */
 .whatsapp-float {
