@@ -778,7 +778,27 @@ body {
   .stats__grid { grid-template-columns: 1fr; gap: 24px; }
   .stat { border-right: none; border-bottom: 1px solid rgba(255,255,255,0.12); padding-bottom: 20px; }
   .stat:last-child { border-bottom: none; padding-bottom: 0; }
-  .services__grid { grid-template-columns: 1fr; }
+  /* Vira carrossel de arrastar: bleed pra fora do padding do .container pra
+     "espiar" o próximo card na borda da tela, como sinal de que dá pra
+     arrastar. */
+  .services__grid {
+    display: flex;
+    grid-template-columns: none;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scroll-padding-left: 24px;
+    gap: 16px;
+    margin: 0 -24px;
+    padding: 4px 24px 16px;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+  }
+  .services__grid::-webkit-scrollbar { display: none; }
+  .service-card {
+    scroll-snap-align: start;
+    flex: 0 0 82%;
+    min-width: 82%;
+  }
   .diff__grid { grid-template-columns: 1fr; }
   .cta-banner__inner { padding: 40px 28px; justify-content: center; text-align: center; }
   .footer__inner { grid-template-columns: 1fr; }
