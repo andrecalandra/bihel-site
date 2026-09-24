@@ -66,6 +66,7 @@ body {
 .diff__grid .diff-card:nth-child(4) { transition-delay: .18s; }
 .diff__grid .diff-card:nth-child(5) { transition-delay: .24s; }
 .diff__grid .diff-card:nth-child(6) { transition-delay: .3s; }
+.diff__grid .diff-card:nth-child(7) { transition-delay: .36s; }
 
 @media (prefers-reduced-motion: reduce) {
   .reveal { transition-duration: .01ms !important; transform: none !important; }

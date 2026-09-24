@@ -12,6 +12,32 @@ const WHATSAPP_HREF =
 // `details` é o texto completo mostrado no modal ao clicar no card.
 const SERVICES = [
   {
+    title: "Inspeção Termográfica com Drone",
+    desc: "Identificação rápida e não invasiva de manifestações patológicas em fachadas, com câmeras termográficas aéreas.",
+    details: `Na Bihel Engenharia, utilizamos drones equipados com câmeras termográficas para realizar inspeções detalhadas de fachadas, unindo tecnologia de ponta a décadas de experiência técnica em engenharia predial.
+
+Como Funciona
+A câmera termográfica capta a diferença de temperatura na superfície da fachada. Áreas com infiltração, descolamento de revestimento ou falhas construtivas aquecem ou resfriam de forma diferente do restante da parede, revelando problemas invisíveis a olho nu.
+
+Principais Aplicações
+* Detecção de Infiltrações Ocultas: mapeia a umidade interna por meio da diferença de temperatura do revestimento.
+* Identificação de Descolamentos: encontra falhas de aderência em pastilhas e rebocos antes que ocorram quedas de material.
+* Mapeamento de Manifestações Patológicas: documenta trincas, fissuras e demais problemas estruturais e estéticos com precisão.
+* Relatórios com Imagens de Alta Resolução: cada inspeção gera um relatório técnico detalhado, com registro visual de todos os pontos identificados.
+
+Rapidez e Segurança
+Por ser um ensaio não destrutivo, a inspeção com drone dispensa o uso inicial de andaimes ou balancins, reduz o incômodo aos moradores e costuma ser concluída em poucas horas de voo, com acesso seguro a áreas de difícil alcance.
+
+Por que Escolher a Bihel Engenharia?
+* Tecnologia de Ponta: drones, câmeras termográficas e software avançado para diagnósticos precisos.
+* Ensaio Não Destrutivo: nenhuma intervenção física na fachada durante o mapeamento.
+* Equipe Especializada: engenheiros com experiência em patologia das construções interpretam cada imagem térmica.
+* Relatórios Claros: documentação técnica de fácil compreensão para síndicos, administradoras e proprietários.
+
+Entre em contato conosco e descubra como a inspeção termográfica com drone pode antecipar problemas na fachada do seu condomínio antes que se tornem custosos ou perigosos.`,
+    img: asset("assets/inspecao-termografica-drone.webp"),
+  },
+  {
     title: "Acompanhamento de Contratos",
     desc: "Para que seus projetos sejam executados dentro do prazo e do orçamento acordados.",
     details: `Nosso serviço abrangente inclui:
@@ -566,6 +592,11 @@ export default function App() {
                 <svg viewBox="0 0 24 24"><path d="M12 2 2 7l10 5 10-5-10-5Zm0 7L2 14l10 5 10-5-10-5Zm0 7-8-4v2l8 4 8-4v-2l-8 4Z" /></svg>
                 <h3>Excelência Técnica</h3>
                 <p>Equipe especializada em engenharia e arquitetura para condomínios e edifícios.</p>
+              </div>
+              <div className="diff-card reveal">
+                <svg viewBox="0 0 24 24"><path d="M12 2 3 7v6c0 5 3.8 8.7 9 9 5.2-.3 9-4 9-9V7l-9-5Zm0 3.3 6 3.3v4.4c0 3.5-2.6 6.4-6 6.9-3.4-.5-6-3.4-6-6.9V8.6l6-3.3Zm-1 3.7v4l3.4 2 .8-1.3-2.7-1.6V9Z" /></svg>
+                <h3>Tecnologia com Drones</h3>
+                <p>Inspeção termográfica aérea que revela infiltrações e descolamentos invisíveis a olho nu.</p>
               </div>
               <div className="diff-card reveal">
                 <svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20Zm1 5v5.4l4 2.4-.8 1.3-4.7-2.8V7h1.5Z" /></svg>
