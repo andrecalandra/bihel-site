@@ -430,7 +430,7 @@ export default function App() {
                   target="_blank"
                   rel="noopener noreferrer"
                 >
-                  Solicitar orçamento
+                  Solicitar proposta
                 </a>
                 <a className="btn btn--ghost btn--lg" href="#servicos">
                   Conhecer serviços

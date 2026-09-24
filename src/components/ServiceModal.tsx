@@ -61,7 +61,7 @@ export default function ServiceModal({
             className="btn btn--primary"
             onClick={() => onRequestQuote(service.title)}
           >
-            Solicitar orçamento
+            Solicitar proposta
           </button>
         </div>
       </div>

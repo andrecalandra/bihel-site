@@ -28,7 +28,11 @@ export default function QuoteForm({
   whatsappNumber: string;
   serviceOptions: string[];
 }) {
-  const preselected = new URLSearchParams(window.location.search).get("service");
+  // `window` não existe durante a pré-renderização no build (Node).
+  const preselected =
+    typeof window !== "undefined"
+      ? new URLSearchParams(window.location.search).get("service")
+      : null;
   const initialService = preselected && serviceOptions.includes(preselected)
     ? preselected
     : "Outro / não sei ainda";
@@ -87,7 +91,7 @@ export default function QuoteForm({
       </div>
 
       <button type="submit" className="btn btn--primary btn--lg btn--block" disabled={status === "redirecting"}>
-        {status === "redirecting" ? "Abrindo WhatsApp..." : "Solicitar orçamento"}
+        {status === "redirecting" ? "Abrindo WhatsApp..." : "Solicitar proposta"}
       </button>
 
       {status === "redirecting" && (

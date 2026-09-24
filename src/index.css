@@ -177,6 +177,16 @@ body {
   width: auto;
   filter: brightness(0) invert(1);
 }
+.logo__compact { display: none; align-items: center; }
+/* O arquivo de origem tem a marca "BIHEL ENGENHARIA" desenhada abaixo do
+   ícone; cover + object-position:top mostra só o ícone e recorta o texto. */
+.logo__compact img {
+  height: 40px;
+  width: 78px;
+  object-fit: cover;
+  object-position: top;
+  filter: brightness(0) invert(1);
+}
 
 .nav {
   display: flex;
@@ -200,6 +210,16 @@ body {
 }
 .nav a:hover { color: var(--white); }
 .nav a:hover::after { width: 100%; }
+
+/* Cabeçalho, numeração e CTA do painel do menu mobile: só existem dentro
+   do @media (max-width: 760px) mais abaixo, onde o .nav vira um painel lateral. */
+.header .nav-overlay,
+.header .nav__head,
+.header .nav__num,
+.header .nav__cta {
+  display: none;
+}
+.nav__links { display: flex; align-items: center; gap: 36px; }
 
 .header__actions { display: flex; align-items: center; gap: 18px; }
 
@@ -546,6 +566,10 @@ body {
   overflow: hidden;
   border: 1px solid var(--gray-100);
 }
+/* Sem min-width:0, o <select> de serviços (opção mais longa) empurra a
+   coluna do grid além da largura do container e o overflow:hidden acima
+   corta o conteúdo em telas estreitas. */
+.quote__intro, .quote__form { min-width: 0; }
 .quote__intro { padding: 56px; display: flex; flex-direction: column; justify-content: center; }
 .quote__intro h2 { font-size: clamp(1.6rem, 2.6vw, 2.1rem); margin-bottom: 16px; }
 .quote__intro p { color: var(--gray-500); margin-bottom: 28px; }
@@ -558,6 +582,8 @@ body {
 .form-field input,
 .form-field select,
 .form-field textarea {
+  width: 100%;
+  min-width: 0;
   border: 1.5px solid var(--gray-100);
   background: var(--gray-50);
   border-radius: 10px;
@@ -669,26 +695,93 @@ body {
 }
 
 @media (max-width: 760px) {
+  .header .nav-overlay {
+    display: block;
+    position: fixed;
+    inset: 0;
+    background: rgba(13,20,48,0.55);
+    backdrop-filter: blur(2px);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity .3s ease;
+    z-index: 98;
+  }
+  .nav-overlay.is-open { opacity: 1; pointer-events: auto; }
+
   .nav {
     position: fixed;
     top: 0; right: 0;
     height: 100vh;
-    width: min(78vw, 320px);
+    width: min(82vw, 340px);
     background: var(--white);
+    display: flex;
     flex-direction: column;
-    padding: 110px 36px 40px;
-    gap: 28px;
-    box-shadow: -12px 0 40px rgba(13,20,48,0.15);
+    padding: 28px 0 28px;
+    box-shadow: -12px 0 40px rgba(13,20,48,0.2);
     transform: translateX(100%);
-    transition: transform .35s ease;
+    transition: transform .35s cubic-bezier(.16,1,.3,1);
     font-size: 1.05rem;
     z-index: 99;
   }
-  .nav a { color: var(--navy-800); }
-  .nav a:hover { color: var(--navy-900); }
   .nav.is-open { transform: translateX(0); }
+
+  .header .nav__head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 28px 20px;
+    margin-bottom: 12px;
+    border-bottom: 1px solid var(--gray-100);
+  }
+  .nav__head-title {
+    font-family: var(--ff-heading);
+    font-weight: 700;
+    color: var(--navy-900);
+    font-size: 1.1rem;
+  }
+  .nav__close {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    border: none;
+    background: var(--gray-50);
+    color: var(--navy-900);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background .2s ease, transform .15s ease;
+  }
+  .nav__close:hover { background: var(--gray-100); transform: scale(1.06); }
+
+  .nav__links { display: flex; flex-direction: column; padding: 0 20px; gap: 2px; flex: 1; }
+  .nav a {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    color: var(--navy-800);
+    padding: 14px 8px;
+    border-radius: 10px;
+    font-weight: 600;
+    transition: background .2s ease, color .2s ease, padding-left .2s ease;
+  }
+  .nav a::after { display: none; }
+  .nav a:hover, .nav a:active { color: var(--navy-900); background: var(--gray-50); padding-left: 14px; }
+  .header .nav__num {
+    display: inline-block;
+    font-family: var(--ff-heading);
+    font-size: 0.78rem;
+    font-weight: 700;
+    color: var(--gold);
+  }
+
+  .header .nav__cta { display: inline-flex; margin: 16px 28px 0; }
+
   .hamburger { display: flex; }
-  .logo img { height: 56px !important; }
+  .logo .logo__full { display: none; }
+  .logo__compact { display: inline-flex; }
+  .header__inner { padding: 10px 20px; gap: 12px; }
+  .header__actions { gap: 14px; }
   .header__actions .btn--primary { font-size: 0.85rem; padding: 10px 16px; }
   .stats__grid { grid-template-columns: 1fr; gap: 24px; }
   .stat { border-right: none; border-bottom: 1px solid rgba(255,255,255,0.12); padding-bottom: 20px; }

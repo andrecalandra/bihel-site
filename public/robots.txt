@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://bihel-site.vercel.app/sitemap.xml
