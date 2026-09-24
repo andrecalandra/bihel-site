@@ -672,6 +672,9 @@ export default function App() {
         <div className="footer__bottom">
           <div className="container footer__bottom-inner">
             <span>&copy; {new Date().getFullYear()} Bihel Engenharia. Todos os direitos reservados.</span>
+            <a className="footer__admin-link" href={asset("privacidade.html")}>
+              Política de Privacidade
+            </a>
           </div>
         </div>
       </footer>

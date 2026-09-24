@@ -1,3 +1,4 @@
+import { resolve } from 'node:path'
 import react from '@vitejs/plugin-react'
 import { defineConfig } from 'vite'
 
@@ -7,4 +8,12 @@ export default defineConfig({
   // quanto na Vercel (serve na raiz do domínio), sem precisar escolher um.
   base: './',
   plugins: [react()],
+  build: {
+    rollupOptions: {
+      input: {
+        index: resolve(import.meta.dirname, 'index.html'),
+        privacidade: resolve(import.meta.dirname, 'privacidade.html'),
+      },
+    },
+  },
 })
