@@ -32,10 +32,21 @@
 
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <!-- Carrega a folha de estilo da fonte sem bloquear a renderização: o
+         browser busca em paralelo (rel=preload) e só a aplica como stylesheet
+         quando chega, em vez de pausar o primeiro paint até ela terminar. -->
     <link
+      rel="preload"
+      as="style"
       href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@500;600;700;800&display=swap"
-      rel="stylesheet"
+      onload="this.onload=null;this.rel='stylesheet'"
     />
+    <noscript>
+      <link
+        rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@500;600;700;800&display=swap"
+      />
+    </noscript>
     <script type="application/ld+json">
       {
         "@context": "https://schema.org",

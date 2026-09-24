@@ -48,20 +48,21 @@ export default function SiteHeader() {
     >
       <div className="container header__inner">
         <a href="#topo" className="logo">
-          <img
-            className="logo__full"
-            src={asset("assets/Logo-Bihel-Engenharia-Azul-1024x689.png")}
-            alt="Bihel Engenharia"
-            width={260}
-            height={175}
-            style={{ height: 108, width: "auto" }}
-          />
-          <span
-            className="logo__compact"
-            role="img"
-            aria-label="Bihel Engenharia"
-            style={{ backgroundImage: `url(${asset("assets/Logo-Bihel-Engenharia-Azul-1024x689.png")})` }}
-          />
+          {/* <picture> garante que o navegador baixe só uma das duas imagens
+              (nunca as duas), conforme a largura da tela. */}
+          <picture>
+            <source
+              media="(max-width: 760px)"
+              srcSet={asset("assets/icone-bihel.webp")}
+            />
+            <img
+              src={asset("assets/Logo-Bihel-Engenharia-Azul-1024x689.png")}
+              alt="Bihel Engenharia"
+              width={260}
+              height={175}
+              className="logo__img"
+            />
+          </picture>
         </a>
 
         <nav className={`nav ${isOpen ? "is-open" : ""}`} aria-hidden={!isOpen}>

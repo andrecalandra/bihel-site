@@ -173,22 +173,9 @@ body {
   gap: 24px;
 }
 .logo { display: inline-flex; align-items: center; }
-.logo img {
+.logo__img {
+  height: 108px;
   width: auto;
-  filter: brightness(0) invert(1);
-}
-/* Recorte por background-image: a logo original (1024x689) tem o ícone dos
-   prédios no topo e a marca "BIHEL ENGENHARIA" desenhada embaixo. Recortar
-   direto do arquivo em alta resolução (em vez das variantes 150/300px já
-   comprimidas) mantém o ícone nítido; background-size/position isolam só a
-   região do ícone (x:198-807, y:140-505 no original) e escondem o texto. */
-.logo__compact {
-  display: none;
-  width: 67px;
-  height: 40px;
-  background-repeat: no-repeat;
-  background-size: 112.2px 75.5px;
-  background-position: -21.7px -15.3px;
   filter: brightness(0) invert(1);
 }
 
@@ -776,8 +763,7 @@ body {
   }
 
   .hamburger { display: flex; }
-  .logo .logo__full { display: none; }
-  .logo__compact { display: inline-block; }
+  .logo__img { height: 44px; }
   .header__inner { padding: 10px 20px; gap: 12px; }
   .header__actions { gap: 14px; }
   .header__actions .btn--primary { font-size: 0.85rem; padding: 10px 16px; }
