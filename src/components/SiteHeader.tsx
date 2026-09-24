@@ -56,48 +56,45 @@ export default function SiteHeader() {
             height={175}
             style={{ height: 108, width: "auto" }}
           />
-          <span className="logo__compact">
-            <img
-              src={asset("assets/Bihel-Engenharia-Logo.webp")}
-              alt="Bihel Engenharia"
-              width={78}
-              height={40}
-            />
-          </span>
+          <span
+            className="logo__compact"
+            role="img"
+            aria-label="Bihel Engenharia"
+            style={{ backgroundImage: `url(${asset("assets/Logo-Bihel-Engenharia-Azul-1024x689.png")})` }}
+          />
         </a>
 
-        <div
-          className={`nav-overlay ${isOpen ? "is-open" : ""}`}
-          onClick={() => setIsOpen(false)}
-          aria-hidden="true"
-        />
-
-        <nav className={`nav ${isOpen ? "is-open" : ""}`}>
-          <div className="nav__head">
-            <span className="nav__head-title">Menu</span>
-            <button
-              className="nav__close"
-              aria-label="Fechar menu"
-              onClick={() => setIsOpen(false)}
-            >
-              ✕
-            </button>
-          </div>
+        <nav className={`nav ${isOpen ? "is-open" : ""}`} aria-hidden={!isOpen}>
+          <button
+            className="nav__close"
+            aria-label="Fechar menu"
+            onClick={() => setIsOpen(false)}
+            tabIndex={isOpen ? 0 : -1}
+          >
+            ✕
+          </button>
           <div className="nav__links">
             {NAV_LINKS.map((link, i) => (
-              <a key={link.href} href={link.href} onClick={() => setIsOpen(false)}>
+              <a
+                key={link.href}
+                href={link.href}
+                onClick={() => setIsOpen(false)}
+                tabIndex={isOpen ? 0 : -1}
+                style={{ transitionDelay: isOpen ? `${0.08 + i * 0.05}s` : "0s" }}
+              >
                 <span className="nav__num">{String(i + 1).padStart(2, "0")}</span>
                 {link.label}
               </a>
             ))}
           </div>
           <a
-            className="btn btn--primary btn--block nav__cta"
+            className="btn btn--primary btn--lg nav__cta"
             href={WHATSAPP_HREF}
             target="_blank"
             rel="noopener noreferrer"
+            tabIndex={isOpen ? 0 : -1}
           >
-            Solicite um orçamento
+            Solicitar proposta
           </a>
         </nav>
 

@@ -177,14 +177,18 @@ body {
   width: auto;
   filter: brightness(0) invert(1);
 }
-.logo__compact { display: none; align-items: center; }
-/* O arquivo de origem tem a marca "BIHEL ENGENHARIA" desenhada abaixo do
-   ícone; cover + object-position:top mostra só o ícone e recorta o texto. */
-.logo__compact img {
+/* Recorte por background-image: a logo original (1024x689) tem o ícone dos
+   prédios no topo e a marca "BIHEL ENGENHARIA" desenhada embaixo. Recortar
+   direto do arquivo em alta resolução (em vez das variantes 150/300px já
+   comprimidas) mantém o ícone nítido; background-size/position isolam só a
+   região do ícone (x:198-807, y:140-505 no original) e escondem o texto. */
+.logo__compact {
+  display: none;
+  width: 67px;
   height: 40px;
-  width: 78px;
-  object-fit: cover;
-  object-position: top;
+  background-repeat: no-repeat;
+  background-size: 112.2px 75.5px;
+  background-position: -21.7px -15.3px;
   filter: brightness(0) invert(1);
 }
 
@@ -211,10 +215,10 @@ body {
 .nav a:hover { color: var(--white); }
 .nav a:hover::after { width: 100%; }
 
-/* Cabeçalho, numeração e CTA do painel do menu mobile: só existem dentro
-   do @media (max-width: 760px) mais abaixo, onde o .nav vira um painel lateral. */
-.header .nav-overlay,
-.header .nav__head,
+/* Numeração, botão de fechar e CTA do painel do menu mobile: só existem
+   dentro do @media (max-width: 760px) mais abaixo, onde o .nav vira um
+   painel de tela cheia. */
+.header .nav__close,
 .header .nav__num,
 .header .nav__cta {
   display: none;
@@ -695,91 +699,85 @@ body {
 }
 
 @media (max-width: 760px) {
-  .header .nav-overlay {
-    display: block;
-    position: fixed;
-    inset: 0;
-    background: rgba(13,20,48,0.55);
-    backdrop-filter: blur(2px);
-    opacity: 0;
-    pointer-events: none;
-    transition: opacity .3s ease;
-    z-index: 98;
-  }
-  .nav-overlay.is-open { opacity: 1; pointer-events: auto; }
-
+  /* Painel de menu em tela cheia: cobre 100% da viewport, então o próprio
+     padding do .nav insere todo o conteúdo com segurança (nada de margin
+     nos filhos brigando com width:100%, que foi a causa do botão cortado
+     na versão anterior). */
   .nav {
     position: fixed;
-    top: 0; right: 0;
-    height: 100vh;
-    width: min(82vw, 340px);
-    background: var(--white);
+    inset: 0;
     display: flex;
     flex-direction: column;
-    padding: 28px 0 28px;
-    box-shadow: -12px 0 40px rgba(13,20,48,0.2);
-    transform: translateX(100%);
-    transition: transform .35s cubic-bezier(.16,1,.3,1);
-    font-size: 1.05rem;
+    padding: 24px 24px max(24px, env(safe-area-inset-bottom));
+    background:
+      radial-gradient(circle at 100% 0%, rgba(217,164,65,0.16), transparent 55%),
+      linear-gradient(165deg, var(--navy-900) 0%, var(--navy-700) 100%);
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity .3s ease, visibility 0s linear .3s;
     z-index: 99;
   }
-  .nav.is-open { transform: translateX(0); }
+  .nav.is-open { opacity: 1; visibility: visible; transition: opacity .3s ease; }
 
-  .header .nav__head {
+  .header .nav__close {
     display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 0 28px 20px;
-    margin-bottom: 12px;
-    border-bottom: 1px solid var(--gray-100);
-  }
-  .nav__head-title {
-    font-family: var(--ff-heading);
-    font-weight: 700;
-    color: var(--navy-900);
-    font-size: 1.1rem;
-  }
-  .nav__close {
-    width: 36px;
-    height: 36px;
+    align-self: flex-end;
+    width: 40px;
+    height: 40px;
     border-radius: 50%;
-    border: none;
-    background: var(--gray-50);
-    color: var(--navy-900);
+    border: 1.5px solid rgba(255,255,255,0.25);
+    background: rgba(255,255,255,0.08);
+    color: var(--white);
+    font-size: 1.05rem;
     cursor: pointer;
-    display: flex;
     align-items: center;
     justify-content: center;
     transition: background .2s ease, transform .15s ease;
+    flex-shrink: 0;
   }
-  .nav__close:hover { background: var(--gray-100); transform: scale(1.06); }
+  .nav__close:hover { background: rgba(255,255,255,0.18); transform: rotate(90deg); }
 
-  .nav__links { display: flex; flex-direction: column; padding: 0 20px; gap: 2px; flex: 1; }
+  .nav__links {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    justify-content: center;
+    gap: 4px;
+  }
   .nav a {
     display: flex;
-    align-items: center;
-    gap: 14px;
-    color: var(--navy-800);
-    padding: 14px 8px;
-    border-radius: 10px;
-    font-weight: 600;
-    transition: background .2s ease, color .2s ease, padding-left .2s ease;
+    align-items: baseline;
+    gap: 16px;
+    color: var(--white);
+    padding: 16px 4px;
+    border-bottom: 1px solid rgba(255,255,255,0.12);
+    font-size: 1.5rem;
+    font-weight: 700;
+    opacity: 0;
+    transform: translateY(14px);
+    transition: opacity .4s ease, transform .4s ease, color .2s ease;
   }
+  .nav.is-open a { opacity: 1; transform: translateY(0); }
   .nav a::after { display: none; }
-  .nav a:hover, .nav a:active { color: var(--navy-900); background: var(--gray-50); padding-left: 14px; }
+  .nav a:hover, .nav a:active { color: var(--gold-light); }
   .header .nav__num {
     display: inline-block;
     font-family: var(--ff-heading);
-    font-size: 0.78rem;
+    font-size: 0.9rem;
     font-weight: 700;
     color: var(--gold);
   }
 
-  .header .nav__cta { display: inline-flex; margin: 16px 28px 0; }
+  .header .nav__cta {
+    display: flex;
+    width: 100%;
+    justify-content: center;
+    margin-top: 20px;
+  }
 
   .hamburger { display: flex; }
   .logo .logo__full { display: none; }
-  .logo__compact { display: inline-flex; }
+  .logo__compact { display: inline-block; }
   .header__inner { padding: 10px 20px; gap: 12px; }
   .header__actions { gap: 14px; }
   .header__actions .btn--primary { font-size: 0.85rem; padding: 10px 16px; }
