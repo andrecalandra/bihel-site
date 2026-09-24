@@ -5,6 +5,7 @@ import TestimonialsCarousel from "./components/TestimonialsCarousel";
 import { asset } from "./asset";
 import ServiceModal from "./components/ServiceModal";
 import { useState } from "react";
+import { useAutoScrollCarousel } from "./useAutoScrollCarousel";
 
 const WHATSAPP_HREF =
   "https://wa.me/5521993232702?text=Ol%C3%A1!%20Visitei%20o%20site%20da%20Bihel%20Engenharia%20e%20gostaria%20de%20solicitar%20um%20or%C3%A7amento.";
@@ -425,6 +426,7 @@ const TESTIMONIALS = [
 export default function App() {
   const [selectedServiceTitle, setSelectedServiceTitle] = useState<string | null>(null);
   const selectedService = SERVICES.find((s) => s.title === selectedServiceTitle) ?? null;
+  const servicesCarouselRef = useAutoScrollCarousel<HTMLDivElement>(SERVICES.length);
 
   function handleRequestQuote(title: string) {
     const message = `Olá! Tenho interesse no serviço de ${title} e gostaria de solicitar um orçamento.`;
@@ -521,7 +523,13 @@ export default function App() {
               </div>
               <div className="mv-card reveal">
                 <div className="mv-card__img">
-                  <img src={asset("assets/visao.webp")} alt="Equipe Bihel Engenharia" width={280} height={300} />
+                  <img
+                    src={asset("assets/visao.webp")}
+                    alt="Equipe Bihel Engenharia"
+                    width={280}
+                    height={300}
+                    style={{ objectPosition: "top" }}
+                  />
                 </div>
                 <div className="mv-card__body">
                   <h3>Nossa Visão</h3>
@@ -547,7 +555,7 @@ export default function App() {
               </p>
             </div>
 
-            <div className="services__grid">
+            <div className="services__grid" ref={servicesCarouselRef}>
               {SERVICES.map((service, i) => (
                 <button
                   key={service.title}
