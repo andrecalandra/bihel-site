@@ -33,6 +33,7 @@ export function useAutoScrollCarousel<T extends HTMLElement>(
 
     let paused = false;
     let resumeTimer: ReturnType<typeof setTimeout> | null = null;
+    let visible = false;
 
     function pause() {
       paused = true;
@@ -45,20 +46,28 @@ export function useAutoScrollCarousel<T extends HTMLElement>(
     el.addEventListener("pointerdown", pause);
     el.addEventListener("touchstart", pause, { passive: true });
 
+    // Só avança enquanto a seção está mesmo visível — sem isso o autoplay
+    // continua rodando com a pessoa em outra parte da página.
+    const observer = new IntersectionObserver(([entry]) => {
+      visible = entry.isIntersecting;
+    });
+    observer.observe(el);
+
     const timer = setInterval(() => {
-      if (paused) return;
+      if (paused || !visible) return;
       if (!window.matchMedia("(max-width: 760px)").matches) return;
 
       const nextIndex = (currentIndex(el) + 1) % itemCount;
-      (el.children[nextIndex] as HTMLElement | undefined)?.scrollIntoView({
-        behavior: "smooth",
-        inline: "start",
-        block: "nearest",
-      });
+      const nextCard = el.children[nextIndex] as HTMLElement | undefined;
+      if (!nextCard) return;
+      // scrollTo no próprio container (não scrollIntoView): rola só o
+      // carrossel na horizontal, sem arrastar a página inteira na vertical.
+      el.scrollTo({ left: nextCard.offsetLeft, behavior: "smooth" });
     }, intervalMs);
 
     return () => {
       clearInterval(timer);
+      observer.disconnect();
       if (resumeTimer) clearTimeout(resumeTimer);
       el.removeEventListener("pointerdown", pause);
       el.removeEventListener("touchstart", pause);
