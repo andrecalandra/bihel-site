@@ -707,6 +707,9 @@ body {
 }
 
 @media (max-width: 760px) {
+  /* Esconde a ilustração do hero só no mobile; no tablet/desktop continua. */
+  .hero__media { display: none; }
+
   /* Painel de menu em tela cheia: cobre 100% da viewport, então o próprio
      padding do .nav insere todo o conteúdo com segurança (nada de margin
      nos filhos brigando com width:100%, que foi a causa do botão cortado
