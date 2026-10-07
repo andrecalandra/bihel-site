@@ -53,13 +53,13 @@ export default function SiteHeader() {
           <picture>
             <source
               media="(max-width: 760px)"
-              srcSet={asset("assets/icone-bihel.webp")}
+              srcSet={asset("assets/icone-bihel-branco.webp")}
             />
             <img
-              src={asset("assets/Logo-Bihel-Engenharia-Azul-1024x689.png")}
+              src={asset("assets/logo-bihel-branca.webp")}
               alt="Bihel Engenharia"
-              width={260}
-              height={175}
+              width={900}
+              height={565}
               className="logo__img"
             />
           </picture>

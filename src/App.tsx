@@ -673,11 +673,12 @@ export default function App() {
         <div className="container footer__inner">
           <div className="footer__col footer__col--brand">
             <img
-              src={asset("assets/Logo-Bihel-Engenharia-Azul-1024x689.png")}
+              src={asset("assets/logo-bihel-branca.webp")}
               alt="Bihel Engenharia"
-              width={200}
-              height={135}
+              width={900}
+              height={565}
               className="footer__logo"
+              loading="lazy"
             />
             <p>
               Soluções especializadas de engenharia para condomínios e edifícios em Niterói e

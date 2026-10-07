@@ -173,11 +173,12 @@ body {
   padding: 10px 24px;
   gap: 24px;
 }
-.logo { display: inline-flex; align-items: center; }
+.logo { display: inline-flex; align-items: center; flex-shrink: 0; }
 .logo__img {
-  height: 108px;
+  height: 76px;
   width: auto;
-  filter: brightness(0) invert(1);
+  max-width: none;
+  flex-shrink: 0;
 }
 
 .nav {
@@ -625,7 +626,7 @@ body {
   padding-bottom: 50px;
   border-bottom: 1px solid rgba(255,255,255,0.1);
 }
-.footer__logo { height: 96px; width: auto; margin-bottom: 18px; filter: brightness(0) invert(1); }
+.footer__logo { height: 120px; width: auto; margin-bottom: 18px; }
 .footer__col--brand p { font-size: 0.92rem; line-height: 1.7; opacity: 0.85; max-width: 320px; }
 .footer__col h4 {
   color: var(--white);
@@ -704,6 +705,15 @@ body {
   .footer__col--brand { grid-column: 1 / -1; }
   .quote__box { grid-template-columns: 1fr; }
   .form-row { grid-template-columns: 1fr; gap: 0; }
+}
+
+/* Faixa intermediária (tablet / janela estreita): sem isso o menu espreme o logo. */
+@media (min-width: 761px) and (max-width: 1000px) {
+  .logo__img { height: 60px; }
+  .header__inner { gap: 16px; }
+  .nav a { white-space: nowrap; }
+  .nav, .nav__links { gap: 20px; font-size: 0.92rem; }
+  .header__actions .btn--primary { font-size: 0.85rem; padding: 10px 16px; }
 }
 
 @media (max-width: 760px) {
@@ -787,7 +797,7 @@ body {
   }
 
   .hamburger { display: flex; }
-  .logo__img { height: 44px; }
+  .logo__img { height: 40px; }
   .header__inner { padding: 10px 20px; gap: 12px; }
   .header__actions { gap: 14px; }
   .header__actions .btn--primary { font-size: 0.85rem; padding: 10px 16px; }
