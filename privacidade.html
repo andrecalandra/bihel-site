@@ -14,7 +14,8 @@
     <!-- Google tag (gtag.js) -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-47XDTHM55R"></script>
     <script>
-      // Não mede o desenvolvimento local (localhost); o resto do site mede normalmente.
+      // Consent Mode v2: nada de cookies de medição até a pessoa aceitar o aviso.
+      // A escolha anterior (se houver) é lida do aparelho antes de a tag começar a medir.
       if (location.hostname === "localhost" || location.hostname === "127.0.0.1") {
         window["ga-disable-G-47XDTHM55R"] = true;
       }
@@ -22,6 +23,18 @@
       function gtag() {
         dataLayer.push(arguments);
       }
+      gtag("consent", "default", {
+        analytics_storage: "denied",
+        ad_storage: "denied",
+        ad_user_data: "denied",
+        ad_personalization: "denied",
+        wait_for_update: 500,
+      });
+      try {
+        if (localStorage.getItem("bihel_cookie_consent") === "granted") {
+          gtag("consent", "update", { analytics_storage: "granted" });
+        }
+      } catch (e) {}
       gtag("js", new Date());
       gtag("config", "G-47XDTHM55R");
     </script>
@@ -89,6 +102,29 @@
         border-bottom: 2px solid var(--gold);
       }
       strong { color: var(--navy-900); }
+      .consent-box {
+        background: var(--gray-100);
+        border-radius: 14px;
+        padding: 18px 20px;
+        margin: 4px 0 16px;
+      }
+      .consent-box p { margin-bottom: 12px; }
+      .cbtn {
+        font: 600 0.9rem "Poppins", sans-serif;
+        padding: 10px 20px;
+        border-radius: 999px;
+        border: 2px solid var(--navy-900);
+        background: transparent;
+        color: var(--navy-900);
+        cursor: pointer;
+        margin: 0 8px 8px 0;
+      }
+      .cbtn--accept {
+        background: linear-gradient(135deg, var(--gold-light), var(--gold));
+        border-color: transparent;
+      }
+      .cbtn:hover { transform: translateY(-1px); }
+      .cbtn:focus-visible { outline: 3px solid var(--gold); outline-offset: 2px; }
       .cta {
         background: linear-gradient(120deg, var(--navy-900) 0%, var(--navy-700) 100%);
         padding: 56px 24px;
@@ -172,7 +208,17 @@
         publicidade.
       </p>
       <p>
-        Você pode recusar a medição bloqueando cookies nas configurações do navegador ou instalando
+        Esses cookies <strong>só são gravados depois que você aceita</strong> no aviso exibido ao
+        entrar no site. Se você recusar, nenhum cookie de medição é gravado. A sua escolha fica
+        salva neste aparelho e pode ser mudada a qualquer momento:
+      </p>
+      <div class="consent-box">
+        <p>Sua escolha atual: <strong id="consent-state">ainda não definida</strong></p>
+        <button type="button" id="consent-accept" class="cbtn cbtn--accept">Aceitar cookies de medição</button>
+        <button type="button" id="consent-reject" class="cbtn">Recusar</button>
+      </div>
+      <p>
+        Você também pode bloquear cookies nas configurações do navegador ou instalar
         o <a href="https://tools.google.com/dlpage/gaoptout" target="_blank" rel="noopener noreferrer">complemento oficial de desativação do Google Analytics</a>.
         Saiba mais na
         <a href="https://policies.google.com/technologies/partner-sites" target="_blank" rel="noopener noreferrer">explicação do Google sobre o uso de dados</a>.
@@ -229,6 +275,40 @@
     <footer>
       &copy; <span id="year"></span> Bihel Engenharia. Todos os direitos reservados.
     </footer>
+    <script>
+      (function () {
+        var KEY = "bihel_cookie_consent";
+        var label = document.getElementById("consent-state");
+        function current() {
+          try { return localStorage.getItem(KEY); } catch (e) { return null; }
+        }
+        function render() {
+          var v = current();
+          label.textContent = v === "granted" ? "cookies de medição aceitos" : v === "denied" ? "cookies de medição recusados" : "ainda não definida";
+        }
+        function clearGa() {
+          var names = document.cookie.split(";").map(function (c) { return c.split("=")[0].trim(); })
+            .filter(function (n) { return n === "_ga" || n === "_gid" || n.indexOf("_ga_") === 0; });
+          var parts = location.hostname.split(".");
+          var domains = [""];
+          for (var i = 0; i < parts.length - 1; i++) domains.push("." + parts.slice(i).join("."));
+          names.forEach(function (n) {
+            domains.forEach(function (d) {
+              document.cookie = n + "=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/" + (d ? "; domain=" + d : "");
+            });
+          });
+        }
+        function set(v) {
+          try { localStorage.setItem(KEY, v); } catch (e) {}
+          gtag("consent", "update", { analytics_storage: v });
+          if (v === "denied") clearGa();
+          render();
+        }
+        document.getElementById("consent-accept").addEventListener("click", function () { set("granted"); });
+        document.getElementById("consent-reject").addEventListener("click", function () { set("denied"); });
+        render();
+      })();
+    </script>
     <script>document.getElementById('year').textContent = new Date().getFullYear();</script>
   </body>
 </html>

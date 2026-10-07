@@ -5,6 +5,8 @@ import TestimonialsCarousel from "./components/TestimonialsCarousel";
 import { asset } from "./asset";
 import ServiceModal from "./components/ServiceModal";
 import TeamSection from "./components/TeamSection";
+import CookieBanner from "./components/CookieBanner";
+import { CONSENT_OPEN_EVENT } from "./consent";
 import { HAS_TEAM } from "./team";
 import { useState } from "react";
 import { useAutoScrollCarousel } from "./useAutoScrollCarousel";
@@ -730,9 +732,18 @@ export default function App() {
             <a className="footer__admin-link" href={asset("privacidade")}>
               Política de Privacidade
             </a>
+            <button
+              type="button"
+              className="footer__cookie-link"
+              onClick={() => window.dispatchEvent(new Event(CONSENT_OPEN_EVENT))}
+            >
+              Preferências de cookies
+            </button>
           </div>
         </div>
       </footer>
+
+      <CookieBanner />
 
       <a
         className="whatsapp-float"

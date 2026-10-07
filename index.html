@@ -42,7 +42,8 @@
     <!-- Google tag (gtag.js) -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-47XDTHM55R"></script>
     <script>
-      // Não mede o desenvolvimento local (localhost); o resto do site mede normalmente.
+      // Consent Mode v2: nada de cookies de medição até a pessoa aceitar o aviso.
+      // A escolha anterior (se houver) é lida do aparelho antes de a tag começar a medir.
       if (location.hostname === "localhost" || location.hostname === "127.0.0.1") {
         window["ga-disable-G-47XDTHM55R"] = true;
       }
@@ -50,6 +51,18 @@
       function gtag() {
         dataLayer.push(arguments);
       }
+      gtag("consent", "default", {
+        analytics_storage: "denied",
+        ad_storage: "denied",
+        ad_user_data: "denied",
+        ad_personalization: "denied",
+        wait_for_update: 500,
+      });
+      try {
+        if (localStorage.getItem("bihel_cookie_consent") === "granted") {
+          gtag("consent", "update", { analytics_storage: "granted" });
+        }
+      } catch (e) {}
       gtag("js", new Date());
       gtag("config", "G-47XDTHM55R");
     </script>
