@@ -582,6 +582,15 @@ export default function App() {
 
         {/* DIFERENCIAIS */}
         <section className="diferenciais" id="diferenciais">
+          <img
+            className="brand-watermark"
+            src={asset("assets/icone-bihel-branco.webp")}
+            alt=""
+            aria-hidden="true"
+            width={400}
+            height={214}
+            loading="lazy"
+          />
           <div className="container">
             <div className="section-head section-head--light reveal">
               <span className="section-tag section-tag--light">Por que a Bihel</span>

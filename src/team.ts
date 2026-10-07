@@ -7,7 +7,7 @@ export type TeamMember = {
   img: string;
 };
 
-/** Membros sem `name` preenchido ainda não são exibidos no site. */
+/** A seção só aparece no site quando todos os membros têm nome preenchido. */
 export const TEAM: TeamMember[] = [
   {
     name: "Gustavo Bihel",
@@ -38,6 +38,4 @@ export const TEAM: TeamMember[] = [
   },
 ];
 
-export const TEAM_GROUP_IMG = asset("assets/equipe/IMG_0494.webp");
-
-export const HAS_TEAM = TEAM.some((m) => m.name.trim() !== "");
+export const HAS_TEAM = TEAM.every((m) => m.name.trim() !== "");

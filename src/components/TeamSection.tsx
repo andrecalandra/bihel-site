@@ -1,8 +1,7 @@
-import { TEAM, TEAM_GROUP_IMG } from "../team";
+import { HAS_TEAM, TEAM } from "../team";
 
 export default function TeamSection() {
-  const members = TEAM.filter((m) => m.name.trim() !== "");
-  if (members.length === 0) return null;
+  if (!HAS_TEAM) return null;
 
   return (
     <section className="team" id="equipe">
@@ -16,18 +15,8 @@ export default function TeamSection() {
           </p>
         </div>
 
-        <figure className="team__banner reveal">
-          <img
-            src={TEAM_GROUP_IMG}
-            alt="Equipe da Bihel Engenharia reunida"
-            width={1600}
-            height={1143}
-            loading="lazy"
-          />
-        </figure>
-
         <div className="team__grid">
-          {members.map((m, i) => (
+          {TEAM.map((m, i) => (
             <article
               key={m.name}
               className="team-card reveal"

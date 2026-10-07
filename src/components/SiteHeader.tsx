@@ -66,14 +66,31 @@ export default function SiteHeader() {
         </a>
 
         <nav className={`nav ${isOpen ? "is-open" : ""}`} aria-hidden={!isOpen}>
-          <button
-            className="nav__close"
-            aria-label="Fechar menu"
-            onClick={() => setIsOpen(false)}
-            tabIndex={isOpen ? 0 : -1}
-          >
-            ✕
-          </button>
+          <div className="nav__top">
+            <img
+              className="nav__brand"
+              src={asset("assets/logo-bihel-branca.webp")}
+              alt="Bihel Engenharia"
+              width={900}
+              height={565}
+            />
+            <button
+              className="nav__close"
+              aria-label="Fechar menu"
+              onClick={() => setIsOpen(false)}
+              tabIndex={isOpen ? 0 : -1}
+            >
+              ✕
+            </button>
+          </div>
+          <img
+            className="nav__watermark"
+            src={asset("assets/icone-bihel-branco.webp")}
+            alt=""
+            aria-hidden="true"
+            width={400}
+            height={214}
+          />
           <div className="nav__links">
             {NAV_LINKS.map((link, i) => (
               <a
