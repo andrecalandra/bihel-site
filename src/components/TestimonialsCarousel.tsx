@@ -26,6 +26,8 @@ const AUTOPLAY_MS = 6500;
 export default function TestimonialsCarousel({ items }: { items: readonly Testimonial[] }) {
   const [index, setIndex] = useState(0);
   const [paused, setPaused] = useState(false);
+  const [inView, setInView] = useState(false);
+  const rootRef = useRef<HTMLDivElement | null>(null);
   const [height, setHeight] = useState<number | undefined>(undefined);
   const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
   const slideRefs = useRef<(HTMLElement | null)[]>([]);
@@ -38,13 +40,23 @@ export default function TestimonialsCarousel({ items }: { items: readonly Testim
   const next = useCallback(() => goTo(index + 1), [goTo, index]);
   const prev = useCallback(() => goTo(index - 1), [goTo, index]);
 
+  // Só avança sozinho enquanto está na tela. Fora dela, trocar de depoimento muda a altura
+  // do carrossel e empurra as seções de baixo (a página "treme" para quem está lendo o formulário).
   useEffect(() => {
-    if (paused) return;
+    const el = rootRef.current;
+    if (!el || typeof IntersectionObserver === "undefined") return;
+    const observer = new IntersectionObserver(([entry]) => setInView(entry.isIntersecting), { threshold: 0.2 });
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, []);
+
+  useEffect(() => {
+    if (paused || !inView) return;
     timerRef.current = setInterval(() => setIndex((i) => (i + 1) % items.length), AUTOPLAY_MS);
     return () => {
       if (timerRef.current) clearInterval(timerRef.current);
     };
-  }, [paused, items.length]);
+  }, [paused, inView, items.length]);
 
   // A altura do carrossel acompanha o depoimento visível, em vez de usar a
   // do mais longo — senão os mais curtos ficam com um vão enorme embaixo.
@@ -60,6 +72,7 @@ export default function TestimonialsCarousel({ items }: { items: readonly Testim
 
   return (
     <div
+      ref={rootRef}
       className="testimonial-carousel"
       onMouseEnter={() => setPaused(true)}
       onMouseLeave={() => setPaused(false)}
