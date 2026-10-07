@@ -1,4 +1,6 @@
+# TEMPORÁRIO (pré-lançamento): o bloqueio é feito por noindex (meta + cabeçalho
+# X-Robots-Tag). Não usar "Disallow: /" aqui — o Google precisa conseguir rastrear
+# a página para enxergar o noindex. No lançamento em bihel.com.br, adicionar a linha
+# Sitemap: https://www.bihel.com.br/sitemap.xml e recriar o sitemap.xml com o domínio novo.
 User-agent: *
 Allow: /
-
-Sitemap: https://bihel-site.vercel.app/sitemap.xml
