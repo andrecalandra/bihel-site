@@ -10,25 +10,28 @@ import {
 const MAX_PER_HOUR = 6;
 
 export default async function handler(req, res) {
+  // x-lead-status só diz o que aconteceu (nenhum dado): ajuda a achar o motivo se um envio sumir
+  const done = (why) => send(res, 204, undefined, { "X-Lead-Status": why });
   if (req.method !== "POST") return send(res, 405, { erro: "método não permitido" }, { Allow: "POST" });
   try {
-    if (!originAllowed(req) || !storeConfigured()) return send(res, 204);
+    if (!originAllowed(req)) return done("origem-recusada");
+    if (!storeConfigured()) return done("sem-banco");
 
     let payload;
     try {
       payload = JSON.parse(await readBody(req, 8192));
     } catch {
-      return send(res, 204);
+      return done("corpo-invalido");
     }
     // campo-isca escondido no formulário: só robôs preenchem
-    if (payload?.website) return send(res, 204);
+    if (payload?.website) return done("isca-preenchida");
 
     const lead = parseLead(payload);
-    if (!lead) return send(res, 204);
+    if (!lead) return done("dados-invalidos");
 
     const hourKey = `rl:lead:${ipHash(req)}:${Math.floor(Date.now() / 3600000)}`;
     const [count] = await pipeline([["INCR", hourKey], ["EXPIRE", hourKey, 3700]]);
-    if (count > MAX_PER_HOUR) return send(res, 204);
+    if (count > MAX_PER_HOUR) return done("limite-por-hora");
 
     const createdAt = Date.now();
     const id = randomBytes(8).toString("hex");
@@ -45,8 +48,9 @@ export default async function handler(req, res) {
       ["SET", `lead:${id}`, JSON.stringify(record), "EX", LEAD_RETENTION_DAYS * 86400],
       ["ZADD", "leads", createdAt, id],
     ]);
+    return done("gravado");
   } catch (err) {
     console.error("lead:", err?.message);
+    return done("erro-ao-gravar");
   }
-  return send(res, 204);
 }
