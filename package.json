@@ -7,7 +7,9 @@
     "dev": "vite",
     "build": "tsc -b && vite build && vite build --ssr src/entry-server.tsx --outDir dist-ssr && node scripts/prerender.mjs",
     "lint": "oxlint",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "dev:api": "node scripts/dev-api.mjs",
+    "test:api": "node --test scripts/analytics.test.mjs"
   },
   "dependencies": {
     "react": "^19.2.8",

@@ -8,7 +8,8 @@ import TeamSection from "./components/TeamSection";
 import CookieBanner from "./components/CookieBanner";
 import { CONSENT_OPEN_EVENT } from "./consent";
 import { HAS_TEAM } from "./team";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { startAnalytics, track } from "./analytics";
 import { useAutoScrollCarousel } from "./useAutoScrollCarousel";
 
 const WHATSAPP_HREF =
@@ -432,7 +433,17 @@ export default function App() {
   const selectedService = SERVICES.find((s) => s.title === selectedServiceTitle) ?? null;
   const servicesCarouselRef = useAutoScrollCarousel<HTMLDivElement>(SERVICES.length);
 
+  useEffect(() => {
+    startAnalytics();
+  }, []);
+
+  function openService(title: string) {
+    track("service_open", title);
+    setSelectedServiceTitle(title);
+  }
+
   function handleRequestQuote(title: string) {
+    track("whatsapp_click", "Janela do serviço", title);
     const message = `Olá! Tenho interesse no serviço de ${title} e gostaria de solicitar um orçamento.`;
     window.open(`https://wa.me/5521993232702?text=${encodeURIComponent(message)}`, "_blank", "noopener,noreferrer");
     setSelectedServiceTitle(null);
@@ -566,7 +577,7 @@ export default function App() {
                   type="button"
                   className="service-card reveal"
                   style={{ transitionDelay: `${Math.min(i, 5) * 60}ms` }}
-                  onClick={() => setSelectedServiceTitle(service.title)}
+                  onClick={() => openService(service.title)}
                 >
                   <div className="service-card__img">
                     <img src={service.img} alt={service.title} width={768} height={433} loading="lazy" />

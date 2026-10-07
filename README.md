@@ -30,3 +30,13 @@ If you are developing a production application, we recommend enabling type-aware
 ```
 
 See the [Oxlint rules documentation](https://oxc.rs/docs/guide/usage/linter/rules) for the full list of rules and categories.
+
+## Painel de acessos (`/painel`)
+
+Medição própria, sem cookies e sem guardar IP. O site envia visitas e cliques para `POST /api/collect`;
+o painel (`/painel`) lê `GET /api/stats?days=7|30|90` com a senha em `Authorization: Bearer <senha>`.
+
+- Configuração na Vercel: conectar um Redis (Upstash) ao projeto e definir `DASHBOARD_PASSWORD` (veja `.env.example`).
+- Local: `npm run dev:api` (memória, senha `teste`) junto com `npm run dev`, depois abra `/painel.html`.
+- Testes da API: `npm run test:api`.
+- Eventos medidos: visita, `whatsapp_click`, `form_submit`, `service_open`, `section_view` (lista em `api/_lib.js`).

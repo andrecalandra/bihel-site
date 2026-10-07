@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/png" sizes="32x32" href="./assets/favicon-32.png" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="robots" content="noindex, nofollow" />
+    <meta name="theme-color" content="#0d1430" />
+    <title>Painel de acessos | Bihel Engenharia</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      rel="preload"
+      as="style"
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@500;600;700&display=swap"
+      onload="this.onload=null;this.rel='stylesheet'"
+    />
+    <noscript>
+      <link
+        rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@500;600;700&display=swap"
+      />
+    </noscript>
+  </head>
+  <body>
+    <header class="topbar">
+      <div class="topbar__inner">
+        <img src="./assets/logo-bihel-branca.webp" alt="Bihel Engenharia" width="900" height="565" />
+        <div class="topbar__title">
+          <strong>Painel de acessos</strong>
+          <span>Como o site está sendo usado</span>
+        </div>
+        <button type="button" id="logout" class="link-btn" hidden>Sair</button>
+      </div>
+    </header>
+
+    <main id="app">
+      <section id="login" class="login" hidden>
+        <form id="login-form" class="login__card" autocomplete="off">
+          <h1>Entrar no painel</h1>
+          <p>Digite a senha para ver quantas pessoas visitam o site e o que elas fazem nele.</p>
+          <label for="password">Senha</label>
+          <input id="password" type="password" required autocomplete="current-password" />
+          <label class="check"><input id="remember" type="checkbox" /> Lembrar neste aparelho</label>
+          <p id="login-error" class="error" role="alert" hidden></p>
+          <button type="submit" class="btn">Entrar</button>
+        </form>
+      </section>
+
+      <section id="dashboard" hidden>
+        <div class="toolbar">
+          <div class="tabs" role="tablist" aria-label="Período">
+            <button type="button" role="tab" data-days="7" aria-selected="true">Últimos 7 dias</button>
+            <button type="button" role="tab" data-days="30" aria-selected="false">Últimos 30 dias</button>
+            <button type="button" role="tab" data-days="90" aria-selected="false">Últimos 90 dias</button>
+          </div>
+          <span id="updated" class="muted"></span>
+        </div>
+        <div id="content" aria-live="polite"></div>
+      </section>
+
+      <p id="status" class="status" hidden></p>
+    </main>
+
+    <div id="tip" class="tip" role="tooltip" hidden></div>
+    <script type="module" src="/src/painel/main.ts"></script>
+  </body>
+</html>

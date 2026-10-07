@@ -1,4 +1,5 @@
 import { useState, type FormEvent } from "react";
+import { track } from "../analytics";
 
 type Status = "idle" | "redirecting";
 
@@ -44,7 +45,11 @@ export default function QuoteForm({
     setStatus("redirecting");
 
     const form = event.currentTarget;
-    const url = buildWhatsAppUrl(whatsappNumber, new FormData(form));
+    const formData = new FormData(form);
+    const service = String(formData.get("service") || "");
+    track("form_submit", service);
+    track("whatsapp_click", "Formulário de orçamento", service);
+    const url = buildWhatsAppUrl(whatsappNumber, formData);
 
     window.open(url, "_blank", "noopener,noreferrer");
     form.reset();
