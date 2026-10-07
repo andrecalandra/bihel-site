@@ -38,22 +38,22 @@ const BASE_TEAM: TeamMember[] = [
   },
 ];
 
-// Só no localhost: abrir /?equipe=teste mostra a seção com textos de exemplo.
-// Em produção `import.meta.env.DEV` é false e isso some do build.
-const preview =
-  import.meta.env.DEV &&
-  typeof window !== "undefined" &&
-  new URLSearchParams(window.location.search).get("equipe") === "teste";
+/**
+ * PRÉVIA PARA VALIDAÇÃO DO CLIENTE: enquanto for `true`, quem ainda não tem nome aparece com
+ * texto provisório. Antes de lançar no domínio, preencha os nomes acima e troque para `false`
+ * (assim a seção só aparece com todos os dados reais).
+ */
+const SHOW_PLACEHOLDERS = true;
 
-export const TEAM: TeamMember[] = preview
-  ? BASE_TEAM.map((m, i) =>
+export const TEAM: TeamMember[] = SHOW_PLACEHOLDERS
+  ? BASE_TEAM.map((m) =>
       m.name
         ? m
         : {
             ...m,
-            name: `Nome do Colaborador ${i}`,
-            role: "Cargo",
-            bio: "Mini bio de exemplo com uma ou duas frases sobre a atuação e a experiência da pessoa na equipe.",
+            name: "Nome do colaborador",
+            role: "Cargo a definir",
+            bio: "Mini bio a definir: uma ou duas frases sobre a atuação e a experiência da pessoa na equipe.",
           }
     )
   : BASE_TEAM;

@@ -18,7 +18,7 @@ export default function TeamSection() {
         <div className="team__grid">
           {TEAM.map((m, i) => (
             <article
-              key={m.name}
+              key={m.img}
               className="team-card reveal"
               style={{ transitionDelay: `${Math.min(i, 4) * 70}ms` }}
             >
