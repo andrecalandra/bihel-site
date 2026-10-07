@@ -4,6 +4,8 @@ import QuoteForm from "./components/QuoteForm";
 import TestimonialsCarousel from "./components/TestimonialsCarousel";
 import { asset } from "./asset";
 import ServiceModal from "./components/ServiceModal";
+import TeamSection from "./components/TeamSection";
+import { HAS_TEAM } from "./team";
 import { useState } from "react";
 import { useAutoScrollCarousel } from "./useAutoScrollCarousel";
 
@@ -625,6 +627,9 @@ export default function App() {
           </div>
         </section>
 
+        {/* EQUIPE */}
+        <TeamSection />
+
         {/* DEPOIMENTOS */}
         <section className="testimonials" id="depoimentos">
           <div className="container">
@@ -692,6 +697,7 @@ export default function App() {
             <a href="#sobre">Sobre nós</a>
             <a href="#servicos">Serviços</a>
             <a href="#diferenciais">Diferenciais</a>
+            {HAS_TEAM && <a href="#equipe">Nossa equipe</a>}
             <a href="#depoimentos">Depoimentos</a>
           </div>
 
