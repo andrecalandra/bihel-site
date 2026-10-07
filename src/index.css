@@ -465,46 +465,91 @@ body {
 /* ---------- Depoimentos (carrossel) ---------- */
 .testimonials { padding: 100px 0; background: var(--gray-50); }
 
-.testimonial-carousel { max-width: 780px; margin: 0 auto; }
-.testimonial-carousel__row { display: flex; align-items: center; gap: 18px; }
-.testimonial-carousel__viewport { flex: 1; min-width: 0; overflow: hidden; }
+.testimonial-carousel { max-width: 860px; margin: 0 auto; }
+.testimonial-carousel__viewport {
+  overflow: hidden;
+  /* sobra de espaço só pra sombra do cartão não ser cortada; as margens
+     negativas devolvem o espaçamento original */
+  margin: -14px -12px -24px;
+  padding: 14px 0 40px;
+  box-sizing: content-box;
+  transition: height .45s cubic-bezier(.4, 0, .2, 1);
+}
 .testimonial-carousel__track {
   display: flex;
+  align-items: flex-start;
   transition: transform .5s cubic-bezier(.4, 0, .2, 1);
 }
-.testimonial-carousel__slide { flex: 0 0 100%; min-width: 0; box-sizing: border-box; padding: 0 4px; }
+/* padding lateral = folga da sombra e separação entre slides (evita ver a
+   ponta do próximo depoimento) */
+.testimonial-carousel__slide { flex: 0 0 100%; min-width: 0; box-sizing: border-box; margin: 0; padding: 0 12px; transition: opacity .45s ease; }
+.testimonial-carousel__slide[aria-hidden="true"] { opacity: 0; }
 
 .testimonial-carousel__card {
+  position: relative;
+  overflow: hidden;
   background: var(--white);
-  border-radius: var(--radius);
+  border: 1px solid var(--gray-100);
+  border-radius: 24px;
   box-shadow: var(--shadow-md);
-  padding: 48px 52px;
-  text-align: center;
+  padding: 44px 56px 36px;
+  text-align: left;
 }
-.testimonial-carousel__mark {
-  display: block;
+.testimonial-carousel__card::before {
+  content: "";
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, var(--gold-light), var(--gold));
+}
+/* aspas gigantes translúcidas ao fundo */
+.testimonial-carousel__card::after {
+  content: "\201D";
+  position: absolute;
+  right: 28px;
+  top: -6px;
   font-family: var(--ff-heading);
-  font-size: 3.2rem;
+  font-size: 11rem;
   line-height: 1;
   color: var(--gold);
-  margin-bottom: 6px;
+  opacity: 0.1;
+  pointer-events: none;
+}
+.testimonial-carousel__mark {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 46px;
+  height: 46px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--gold-light), var(--gold));
+  color: var(--navy-900);
+  font-family: var(--ff-heading);
+  font-size: 2.2rem;
+  line-height: 1;
+  padding-top: 12px;
+  margin-bottom: 22px;
+  box-shadow: 0 8px 20px rgba(217, 164, 65, 0.35);
 }
 .testimonial-carousel__card blockquote {
-  margin: 0 auto 26px;
-  max-width: 560px;
-  color: var(--navy-900);
-  font-size: 1.03rem;
-  line-height: 1.8;
+  position: relative;
+  margin: 0 0 28px;
+  color: var(--navy-800);
+  font-size: 1.12rem;
+  line-height: 1.85;
 }
 .testimonial-carousel__card figcaption {
+  position: relative;
   display: flex;
-  flex-direction: column;
   align-items: center;
-  gap: 8px;
+  gap: 14px;
+  padding-top: 22px;
+  border-top: 1px solid var(--gray-100);
 }
 .testimonial-carousel__avatar {
-  width: 56px;
-  height: 56px;
+  flex-shrink: 0;
+  width: 52px;
+  height: 52px;
   border-radius: 50%;
   display: flex;
   align-items: center;
@@ -512,13 +557,21 @@ body {
   color: var(--white);
   font-family: var(--ff-heading);
   font-weight: 700;
-  font-size: 1.1rem;
+  font-size: 1.05rem;
   letter-spacing: .02em;
+  box-shadow: 0 0 0 3px var(--white), 0 0 0 5px var(--gold-light);
 }
 .testimonial-carousel__who { display: flex; flex-direction: column; gap: 2px; }
-.testimonial-carousel__author { font-family: var(--ff-heading); font-weight: 600; color: var(--navy-900); font-size: 0.98rem; }
-.testimonial-carousel__role { color: var(--gray-500); font-size: 0.85rem; }
+.testimonial-carousel__author { font-family: var(--ff-heading); font-weight: 600; color: var(--navy-900); font-size: 1rem; }
+.testimonial-carousel__role { color: var(--gray-500); font-size: 0.86rem; }
 
+.testimonial-carousel__controls {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 18px;
+  margin-top: 14px;
+}
 .testimonial-carousel__arrow {
   flex-shrink: 0;
   width: 42px;
@@ -530,6 +583,7 @@ body {
   color: var(--navy-700);
   font-size: 1.5rem;
   line-height: 1;
+  padding-bottom: 3px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -539,28 +593,28 @@ body {
 .testimonial-carousel__arrow:hover { background: var(--navy-800); color: var(--white); transform: translateY(-1px); }
 .testimonial-carousel__arrow:active { transform: translateY(0); }
 
-.testimonial-carousel__dots {
-  display: flex;
-  justify-content: center;
-  gap: 8px;
-  margin-top: 24px;
-}
+.testimonial-carousel__dots { display: flex; justify-content: center; align-items: center; gap: 8px; }
 .testimonial-carousel__dot {
   width: 8px;
   height: 8px;
   border-radius: 99px;
-  background: var(--gray-100);
+  background: #cfd5e6;
   border: none;
   cursor: pointer;
   padding: 0;
-  transition: background .2s ease, width .2s ease;
+  transition: background .2s ease, width .25s ease;
 }
 .testimonial-carousel__dot:hover { background: var(--gold-light); }
-.testimonial-carousel__dot.is-active { background: var(--gold); width: 22px; }
+.testimonial-carousel__dot.is-active { background: var(--gold); width: 24px; }
 
 @media (max-width: 720px) {
-  .testimonial-carousel__card { padding: 36px 26px; }
-  .testimonial-carousel__arrow { display: none; }
+  .testimonials { padding: 72px 0; }
+  .testimonial-carousel__card { padding: 34px 24px 26px; border-radius: 20px; }
+  .testimonial-carousel__card::after { font-size: 8rem; right: 14px; }
+  .testimonial-carousel__card blockquote { font-size: 1.02rem; line-height: 1.75; margin-bottom: 22px; }
+  .testimonial-carousel__mark { width: 40px; height: 40px; font-size: 1.9rem; padding-top: 10px; margin-bottom: 18px; }
+  .testimonial-carousel__controls { gap: 14px; margin-top: 18px; }
+  .testimonial-carousel__arrow { width: 38px; height: 38px; }
 }
 
 /* ---------- Quote / Lead form ---------- */
