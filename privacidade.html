@@ -11,6 +11,20 @@
       content="Política de Privacidade da Bihel Engenharia: como tratamos os dados enviados pelo formulário de orçamento do site."
     />
     <title>Política de Privacidade | Bihel Engenharia</title>
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-47XDTHM55R"></script>
+    <script>
+      // Não mede o desenvolvimento local (localhost); o resto do site mede normalmente.
+      if (location.hostname === "localhost" || location.hostname === "127.0.0.1") {
+        window["ga-disable-G-47XDTHM55R"] = true;
+      }
+      window.dataLayer = window.dataLayer || [];
+      function gtag() {
+        dataLayer.push(arguments);
+      }
+      gtag("js", new Date());
+      gtag("config", "G-47XDTHM55R");
+    </script>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
@@ -147,13 +161,27 @@
         via WhatsApp, usado exclusivamente para responder à sua solicitação de orçamento.
       </p>
 
-      <h2>Cookies e rastreamento</h2>
+      <h2>Cookies e estatísticas de acesso</h2>
       <p>
-        Este site não usa cookies de rastreamento, pixels de redes sociais ou ferramentas de
-        analytics de terceiros. A única solicitação a um serviço externo é o carregamento das
-        fontes tipográficas via Google Fonts, necessário para exibir o site corretamente; essa
-        solicitação pode expor seu endereço IP ao Google, conforme a
+        Este site usa o <strong>Google Analytics</strong> (Google LLC) para entender, de forma
+        agregada, como o site é usado: páginas e seções visitadas, tempo de permanência, origem do
+        acesso (por exemplo, Google ou WhatsApp), tipo de aparelho e cidade aproximada. Para isso,
+        o Google grava <strong>cookies</strong> (como o <code>_ga</code>) no seu navegador e recebe
+        informações do seu acesso, incluindo o endereço IP, que o Google Analytics 4 não armazena
+        de forma identificável. Não usamos esses dados para identificar você pessoalmente nem para
+        publicidade.
+      </p>
+      <p>
+        Você pode recusar a medição bloqueando cookies nas configurações do navegador ou instalando
+        o <a href="https://tools.google.com/dlpage/gaoptout" target="_blank" rel="noopener noreferrer">complemento oficial de desativação do Google Analytics</a>.
+        Saiba mais na
+        <a href="https://policies.google.com/technologies/partner-sites" target="_blank" rel="noopener noreferrer">explicação do Google sobre o uso de dados</a>.
+      </p>
+      <p>
+        O site também carrega as fontes tipográficas via Google Fonts, necessário para exibi-lo
+        corretamente; essa solicitação pode expor seu endereço IP ao Google, conforme a
         <a href="https://policies.google.com/privacy" target="_blank" rel="noopener noreferrer">política de privacidade do Google</a>.
+        Não usamos pixels de redes sociais.
       </p>
 
       <h2>Compartilhamento com terceiros</h2>
@@ -179,9 +207,8 @@
 
       <h2>Alterações desta política</h2>
       <p>
-        Esta política pode ser atualizada para refletir mudanças no site, como a eventual
-        adição de ferramentas de analytics. A data no topo desta página sempre indica a
-        versão mais recente.
+        Esta política pode ser atualizada para refletir mudanças no site, como a adição de novas
+        ferramentas de medição. A data no topo desta página sempre indica a versão mais recente.
       </p>
     </main>
 

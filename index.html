@@ -39,6 +39,20 @@
     />
     <meta name="twitter:image" content="https://bihel-site.vercel.app/assets/og-bihel.jpg" />
 
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-47XDTHM55R"></script>
+    <script>
+      // Não mede o desenvolvimento local (localhost); o resto do site mede normalmente.
+      if (location.hostname === "localhost" || location.hostname === "127.0.0.1") {
+        window["ga-disable-G-47XDTHM55R"] = true;
+      }
+      window.dataLayer = window.dataLayer || [];
+      function gtag() {
+        dataLayer.push(arguments);
+      }
+      gtag("js", new Date());
+      gtag("config", "G-47XDTHM55R");
+    </script>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <!-- Carrega a folha de estilo da fonte sem bloquear a renderização: o
