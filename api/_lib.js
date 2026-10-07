@@ -69,6 +69,8 @@ function memoryPipeline(commands) {
         const z = mem.zset.get(key);
         return args.reduce((n, m) => n + Number(Boolean(z?.delete(m))), 0);
       }
+      case "ZCARD":
+        return mem.zset.get(key)?.size ?? 0;
       case "ZREVRANGE": {
         const z = [...(mem.zset.get(key) ?? [])].sort((a, b) => b[1] - a[1]).map(([m]) => m);
         const stop = Number(args[1]);

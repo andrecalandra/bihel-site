@@ -1,5 +1,5 @@
 import "./painel.css";
-import { AuthError, initLeads, loadLeads } from "./leads";
+import { AuthError, initLeads, loadLeads, stopLeads } from "./leads";
 
 interface Ranked { name: string; count: number; contacts?: number }
 interface Daily { date: string; views: number; visitors: number; contacts: number }
@@ -258,6 +258,7 @@ $("login-form").addEventListener("submit", async (event) => {
 
 function backToLogin(message = "") {
   forget();
+  stopLeads();
   leadsLoaded = false;
   show("login");
   showLoginError(message);
@@ -282,6 +283,7 @@ document.querySelectorAll<HTMLButtonElement>(".views button").forEach((btn) => {
 
 logoutBtn.addEventListener("click", () => {
   forget();
+  stopLeads();
   leadsLoaded = false;
   password = "";
   ($("password") as HTMLInputElement).value = "";

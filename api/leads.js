@@ -1,5 +1,5 @@
 // /api/leads — lista e gerencia os pedidos de orçamento. Protegido por senha.
-//   GET                      → { leads: [...], total }
+//   GET                      → { leads: [...], total }   (?peek=1 → { total, latest } só para checar novidades)
 //   PATCH  { id, status?, note? } → lead atualizado
 //   DELETE ?id=...           → apaga o lead
 import {
@@ -17,6 +17,11 @@ export default async function handler(req, res) {
     if (!(await authorize(req, res))) return;
 
     if (req.method === "GET") {
+      // consulta leve (o painel faz a cada ~45 s): só diz se chegou ou saiu algum lead
+      if (new URL(req.url, "http://x").searchParams.get("peek")) {
+        const [total, latest] = await pipeline([["ZCARD", "leads"], ["ZREVRANGE", "leads", 0, 0]]);
+        return send(res, 200, { total: Number(total) || 0, latest: latest?.[0] || "" });
+      }
       const [ids] = await pipeline([["ZREVRANGE", "leads", 0, MAX_LEADS - 1]]);
       if (!ids?.length) return send(res, 200, { leads: [], total: 0 });
       const [raw] = await pipeline([["MGET", ...ids.map((id) => `lead:${id}`)]]);

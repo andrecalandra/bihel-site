@@ -1,4 +1,6 @@
 // Aba "Leads" do painel: pedidos de orçamento recebidos pelo formulário do site.
+// Dois jeitos de ver: Quadro (colunas por situação, arrastar para mudar) e Lista.
+// A tela se atualiza sozinha e avisa quando chega lead novo.
 
 interface Lead {
   id: string;
@@ -14,6 +16,7 @@ interface Lead {
   note: string;
 }
 type Status = "novo" | "contato" | "orcamento" | "fechado" | "perdido";
+type Mode = "quadro" | "lista";
 
 const STATUSES: [Status, string][] = [
   ["novo", "Novo"],
@@ -24,6 +27,11 @@ const STATUSES: [Status, string][] = [
 ];
 const LABEL = Object.fromEntries(STATUSES) as Record<Status, string>;
 
+const POLL_MS = 45_000;
+const PAGE_BOARD = 6; // cards por coluna antes de "Ver mais"
+const PAGE_LIST = 12;
+const MODE_KEY = "bihel_painel_leads_modo";
+
 export class AuthError extends Error {}
 
 interface Hooks {
@@ -33,9 +41,19 @@ interface Hooks {
 
 let hooks: Hooks;
 let leads: Lead[] = [];
-let filter: "todos" | Status = "todos";
+let mode: Mode = "quadro";
+let filter: "todos" | Status = "todos"; // só na Lista
 let query = "";
+let visible: Record<string, number> = {};
+let fresh = new Set<string>();
+let known: Set<string> | null = null; // null = ainda não carregou nada (não avisa na primeira vez)
+let signature = "";
+let timer: number | undefined;
+let pendingRepaint = false;
+let built = false;
+let baseTitle = "";
 
+const $ = (id: string) => document.getElementById(id)!;
 const esc = (s: string) =>
   s.replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[c]!);
 
@@ -73,18 +91,19 @@ const whatsappLink = (phone: string) => {
   return `https://wa.me/${digits}`;
 };
 
-function matches(l: Lead): boolean {
-  if (filter !== "todos" && l.status !== filter) return false;
+function matches(l: Lead, useFilter: boolean): boolean {
+  if (useFilter && filter !== "todos" && l.status !== filter) return false;
   if (!query) return true;
   const hay = `${l.name} ${l.phone} ${l.email} ${l.service} ${l.message} ${l.note}`.toLowerCase();
   return hay.includes(query);
 }
 
-// ---------- tela ----------
+// ---------- desenho ----------
+/** Cartão completo (usado na Lista e na janela de detalhes). */
 function card(l: Lead): string {
   const options = STATUSES.map(([v, t]) => `<option value="${v}"${v === l.status ? " selected" : ""}>${t}</option>`).join("");
   const meta = [l.service, l.source, l.city].filter(Boolean).map((t) => `<span>${esc(t)}</span>`).join("");
-  return `<article class="lead lead--${l.status}" data-id="${l.id}">
+  return `<article class="lead lead--${l.status}${fresh.has(l.id) ? " is-fresh" : ""}" data-id="${l.id}">
     <header class="lead__head">
       <h3>${esc(l.name)}</h3>
       <span class="pill pill--${l.status}">${LABEL[l.status]}</span>
@@ -106,27 +125,82 @@ function card(l: Lead): string {
   </article>`;
 }
 
+/** Cartão compacto do quadro. */
+function kcard(l: Lead): string {
+  return `<div class="kcard${fresh.has(l.id) ? " is-fresh" : ""}" draggable="true" data-id="${l.id}" tabindex="0" role="button" aria-label="Abrir ${esc(l.name)}">
+    <div class="kcard__top"><b>${esc(l.name)}</b><time>${when(l.createdAt)}</time></div>
+    ${l.service ? `<span class="kcard__svc">${esc(l.service)}</span>` : ""}
+    ${l.message ? `<p class="kcard__msg">${esc(l.message)}</p>` : ""}
+    <div class="kcard__row">
+      <a class="act act--wa act--sm" href="${whatsappLink(l.phone)}" target="_blank" rel="noopener noreferrer">WhatsApp</a>
+      ${l.note ? `<span class="kcard__note" title="Tem observação">📝</span>` : ""}
+    </div>
+  </div>`;
+}
+
+function more(key: string, rest: number): string {
+  return rest > 0 ? `<button type="button" class="more" data-more="${key}">Ver mais ${rest}</button>` : "";
+}
+
+function paintBoard() {
+  const shown = leads.filter((l) => matches(l, false));
+  $("lead-board").innerHTML = STATUSES.map(([s, label]) => {
+    const col = shown.filter((l) => l.status === s);
+    const limit = visible[s] ?? PAGE_BOARD;
+    const body = col.length
+      ? col.slice(0, limit).map(kcard).join("") + more(s, col.length - limit)
+      : `<p class="kempty">${query ? "Nenhum resultado" : "Arraste um lead até aqui"}</p>`;
+    return `<section class="kcol kcol--${s}" data-col="${s}" aria-label="${label}">
+      <header><h3>${label}</h3><span class="kcount">${col.length}</span></header>
+      <div class="kcol__body">${body}</div>
+    </section>`;
+  }).join("");
+}
+
 function paintList() {
-  const list = document.getElementById("lead-list");
-  if (!list) return;
-  const shown = leads.filter(matches);
-  list.innerHTML = shown.length
-    ? shown.map(card).join("")
+  const shown = leads.filter((l) => matches(l, true));
+  const limit = visible.lista ?? PAGE_LIST;
+  $("lead-list").innerHTML = shown.length
+    ? shown.slice(0, limit).map(card).join("") + more("lista", shown.length - limit)
     : `<p class="empty">${leads.length ? "Nenhum lead com esse filtro." : "Ainda não chegou nenhum pedido de orçamento. Quando alguém preencher o formulário do site, ele aparece aqui."}</p>`;
 }
 
 function paintChips() {
   const count = (s: Status) => leads.filter((l) => l.status === s).length;
   const chips = [["todos", "Todos", leads.length], ...STATUSES.map(([v, t]) => [v, t, count(v)])] as [string, string, number][];
-  document.getElementById("lead-chips")!.innerHTML = chips
+  $("lead-chips").innerHTML = chips
     .map(([v, t, n]) => `<button type="button" data-filter="${v}" aria-pressed="${v === filter}">${t} <b>${n}</b></button>`)
     .join("");
   const novos = count("novo");
-  const badge = document.getElementById("leads-badge")!;
+  const badge = $("leads-badge");
   badge.textContent = String(novos);
   badge.hidden = novos === 0;
+  baseTitle ||= document.title;
+  document.title = novos ? `(${novos}) ${baseTitle}` : baseTitle;
 }
 
+function paintAll() {
+  paintChips();
+  $("lead-chips").hidden = mode !== "lista";
+  $("lead-board").hidden = mode !== "quadro";
+  $("lead-list").hidden = mode !== "lista";
+  document.querySelectorAll<HTMLElement>("[data-lmode]").forEach((b) => b.setAttribute("aria-pressed", String(b.dataset.lmode === mode)));
+  if (mode === "quadro") paintBoard(); else paintList();
+}
+
+/** Redesenha sem atrapalhar quem está escrevendo uma observação na Lista. */
+function repaint() {
+  const active = document.activeElement as HTMLElement | null;
+  if (mode === "lista" && active?.matches("textarea[data-note]") && $("lead-list").contains(active)) {
+    pendingRepaint = true;
+    paintChips();
+    return;
+  }
+  pendingRepaint = false;
+  paintAll();
+}
+
+// ---------- planilha ----------
 function csvCell(value: string): string {
   // evita que uma planilha trate texto digitado por terceiros como fórmula
   const safe = /^[=+\-@\t\r]/.test(value) ? `'${value}` : value;
@@ -134,7 +208,7 @@ function csvCell(value: string): string {
 }
 function exportCsv() {
   const header = ["Data", "Nome", "Telefone", "E-mail", "Serviço", "Mensagem", "Origem", "Cidade", "Situação", "Observação"];
-  const rows = leads.filter(matches).map((l) => [
+  const rows = leads.filter((l) => matches(l, mode === "lista")).map((l) => [
     new Date(l.createdAt).toLocaleString("pt-BR"), l.name, l.phone, l.email, l.service, l.message, l.source, l.city, LABEL[l.status], l.note,
   ]);
   const text = [header, ...rows].map((r) => r.map(csvCell).join(";")).join("\r\n");
@@ -147,6 +221,17 @@ function exportCsv() {
   setTimeout(() => URL.revokeObjectURL(url), 1000);
 }
 
+// ---------- avisos ----------
+let toastTimer: number | undefined;
+function toast(text: string, problem = false) {
+  const el = $("lead-toast");
+  el.textContent = text;
+  el.classList.toggle("toast--bad", problem);
+  el.hidden = false;
+  clearTimeout(toastTimer);
+  toastTimer = window.setTimeout(() => { el.hidden = true; }, problem ? 6000 : 8000);
+}
+
 function flash(el: HTMLElement | null, text = "Salvo ✓", problem = false) {
   if (!el) return;
   el.textContent = text;
@@ -155,91 +240,260 @@ function flash(el: HTMLElement | null, text = "Salvo ✓", problem = false) {
   setTimeout(() => { el.hidden = true; }, 2500);
 }
 
-async function save(id: string, patch: Partial<Pick<Lead, "status" | "note">>, saved: HTMLElement | null) {
+// ---------- ações ----------
+async function save(id: string, patch: Partial<Pick<Lead, "status" | "note">>): Promise<boolean> {
   try {
     const updated: Lead = await api("PATCH", "", { id, ...patch });
     leads = leads.map((l) => (l.id === id ? updated : l));
-    flash(saved);
     return true;
   } catch (err) {
     if (err instanceof AuthError) hooks.onAuthError(err.message);
-    else flash(saved, (err as Error).message, true);
+    else toast((err as Error).message, true);
     return false;
   }
 }
 
+async function moveLead(id: string, status: Status) {
+  const lead = leads.find((l) => l.id === id);
+  if (!lead || lead.status === status) return;
+  const before = lead.status;
+  lead.status = status; // atualiza na hora; volta atrás se o servidor recusar
+  visible[status] = Math.max(visible[status] ?? PAGE_BOARD, 1);
+  repaint();
+  if (!(await save(id, { status }))) {
+    lead.status = before;
+    repaint();
+  }
+}
+
+const dialog = () => $("lead-dialog") as HTMLDialogElement;
+function openLead(id: string) {
+  const lead = leads.find((l) => l.id === id);
+  if (!lead) return;
+  fresh.delete(id);
+  $("lead-dialog-body").innerHTML = card(lead);
+  const d = dialog();
+  if (!d.open) d.showModal();
+}
+
+// ---------- atualização automática ----------
+const sig = (p: { total: number; latest: string }) => `${p.total}|${p.latest}`;
+
+async function refresh(initial = false) {
+  const peek = await api("GET", "?peek=1");
+  signature = sig(peek);
+  const data = await api("GET");
+  const next = data.leads as Lead[];
+  if (known) {
+    const arrived = next.filter((l) => !known!.has(l.id));
+    if (arrived.length) {
+      arrived.forEach((l) => fresh.add(l.id));
+      toast(arrived.length === 1 ? `Chegou um novo lead: ${arrived[0].name}` : `Chegaram ${arrived.length} novos leads`);
+    }
+  }
+  known = new Set(next.map((l) => l.id));
+  leads = next;
+  if (initial) visible = {};
+  $("lead-updated").textContent = `Atualizado às ${pad(new Date().getHours())}:${pad(new Date().getMinutes())}`;
+  repaint();
+}
+
+async function tick() {
+  if (document.hidden || !hooks.password() || !built) return;
+  try {
+    const peek = await api("GET", "?peek=1");
+    if (sig(peek) !== signature) await refresh();
+  } catch (err) {
+    if (err instanceof AuthError) hooks.onAuthError(err.message);
+    /* falha de rede: tenta de novo no próximo ciclo */
+  }
+}
+
+document.addEventListener("visibilitychange", () => {
+  if (!document.hidden && timer !== undefined) void tick();
+});
+
+// ---------- montagem ----------
 function skeleton(root: HTMLElement) {
   root.innerHTML = `
     <div class="leads-bar">
+      <div class="leads-top">
+        <div class="seg" role="group" aria-label="Modo de exibição">
+          <button type="button" data-lmode="quadro" aria-pressed="true">Quadro</button>
+          <button type="button" data-lmode="lista" aria-pressed="false">Lista</button>
+        </div>
+        <span id="lead-updated" class="muted"></span>
+      </div>
       <div id="lead-chips" class="chips"></div>
       <div class="leads-tools">
         <input id="lead-search" type="search" placeholder="Buscar por nome, telefone, serviço…" aria-label="Buscar leads" />
         <button type="button" id="lead-export" class="tool-btn">Baixar planilha (CSV)</button>
       </div>
     </div>
-    <div id="lead-list" class="lead-list"></div>
-    <p class="note">Os dados dos leads ficam guardados por 12 meses e depois são apagados automaticamente.
-      Use "Excluir" para atender um pedido de remoção feito pelo cliente.</p>`;
+    <div id="lead-board" class="board"></div>
+    <div id="lead-list" class="lead-list" hidden></div>
+    <p class="note">Esta tela se atualiza sozinha. Os dados dos leads ficam guardados por 12 meses e depois são apagados
+      automaticamente. Use "Excluir" para atender um pedido de remoção feito pelo cliente.</p>
+    <dialog id="lead-dialog" class="lead-dialog" aria-label="Detalhes do lead">
+      <button type="button" class="dialog-x" data-close aria-label="Fechar">×</button>
+      <div id="lead-dialog-body"></div>
+    </dialog>
+    <div id="lead-toast" class="toast" role="status" hidden></div>`;
 
   root.addEventListener("click", async (e) => {
     const t = e.target as HTMLElement;
+    const modeBtn = t.closest<HTMLElement>("[data-lmode]");
+    if (modeBtn) {
+      mode = modeBtn.dataset.lmode as Mode;
+      try { window.localStorage.setItem(MODE_KEY, mode); } catch { /* sem storage */ }
+      paintAll();
+      return;
+    }
     const chip = t.closest<HTMLElement>("[data-filter]");
-    if (chip) { filter = chip.dataset.filter as typeof filter; paintChips(); paintList(); return; }
+    if (chip) { filter = chip.dataset.filter as typeof filter; visible.lista = PAGE_LIST; paintAll(); return; }
+    const moreBtn = t.closest<HTMLElement>("[data-more]");
+    if (moreBtn) {
+      const key = moreBtn.dataset.more!;
+      visible[key] = (visible[key] ?? (key === "lista" ? PAGE_LIST : PAGE_BOARD)) + (key === "lista" ? PAGE_LIST : PAGE_BOARD);
+      paintAll();
+      return;
+    }
     if (t.closest("#lead-export")) { exportCsv(); return; }
+    if (t === dialog() || t.closest("[data-close]")) { dialog().close(); return; }
+
     const del = t.closest<HTMLElement>("[data-del]");
     if (del) {
-      const lead = leads.find((l) => l.id === del.closest<HTMLElement>(".lead")?.dataset.id);
+      const lead = leads.find((l) => l.id === del.closest<HTMLElement>("[data-id]")?.dataset.id);
       if (!lead || !window.confirm(`Excluir o lead de ${lead.name}? Isso não pode ser desfeito.`)) return;
       try {
         await api("DELETE", `?id=${lead.id}`);
         leads = leads.filter((l) => l.id !== lead.id);
-        paintChips();
-        paintList();
+        known?.delete(lead.id);
+        if (dialog().open) dialog().close();
+        repaint();
+        const peek = await api("GET", "?peek=1");
+        signature = sig(peek);
       } catch (err) {
         if (err instanceof AuthError) hooks.onAuthError(err.message);
-        else window.alert((err as Error).message);
+        else toast((err as Error).message, true);
       }
+      return;
     }
+
+    // clique num cartão do quadro (fora do botão de WhatsApp) abre os detalhes
+    const k = t.closest<HTMLElement>(".kcard");
+    if (k && !t.closest("a")) openLead(k.dataset.id!);
   });
+
+  root.addEventListener("keydown", (e) => {
+    const k = (e.target as HTMLElement).closest<HTMLElement>(".kcard");
+    if (k && e.target === k && (e.key === "Enter" || e.key === " ")) { e.preventDefault(); openLead(k.dataset.id!); }
+  });
+
   root.addEventListener("input", (e) => {
     if ((e.target as HTMLElement).id === "lead-search") {
       query = (e.target as HTMLInputElement).value.trim().toLowerCase();
-      paintList();
+      visible = {};
+      paintAll();
     }
   });
+
   root.addEventListener("change", async (e) => {
     const sel = (e.target as HTMLElement).closest<HTMLSelectElement>("[data-status]");
     if (!sel) return;
-    const el = sel.closest<HTMLElement>(".lead")!;
-    if (await save(el.dataset.id!, { status: sel.value as Status }, el.querySelector("[data-saved]"))) {
-      paintChips();
-      // mantém o cartão na tela até a pessoa terminar; só reaplica o filtro se ele deixar de combinar
-      el.className = `lead lead--${sel.value}`;
+    const el = sel.closest<HTMLElement>("[data-id]")!;
+    const status = sel.value as Status;
+    const lead = leads.find((l) => l.id === el.dataset.id);
+    if (!lead) return;
+    if (await save(lead.id, { status })) {
+      flash(el.querySelector("[data-saved]"));
+      el.className = `lead lead--${status}`;
       const pill = el.querySelector(".pill");
-      if (pill) { pill.className = `pill pill--${sel.value}`; pill.textContent = LABEL[sel.value as Status]; }
+      if (pill) { pill.className = `pill pill--${status}`; pill.textContent = LABEL[status]; }
+      // no quadro o cartão muda de coluna; na Lista ele fica no lugar até a pessoa terminar
+      if (mode === "quadro") paintBoard();
+      paintChips();
     }
   });
-  root.addEventListener("focusout", (e) => {
+
+  root.addEventListener("focusout", async (e) => {
     const area = (e.target as HTMLElement).closest<HTMLTextAreaElement>("[data-note]");
     if (!area) return;
-    const el = area.closest<HTMLElement>(".lead")!;
+    const el = area.closest<HTMLElement>("[data-id]")!;
     const current = leads.find((l) => l.id === el.dataset.id);
-    if (current && current.note !== area.value.trim()) void save(current.id, { note: area.value }, el.querySelector("[data-saved]"));
+    if (current && current.note !== area.value.trim()) {
+      if (await save(current.id, { note: area.value })) {
+        flash(el.querySelector("[data-saved]"));
+        if (mode === "quadro") paintBoard();
+      }
+    }
+    if (pendingRepaint) setTimeout(() => { if (pendingRepaint) repaint(); }, 0);
+  });
+
+  // arrastar e soltar entre colunas (computador)
+  let dragId = "";
+  root.addEventListener("dragstart", (e) => {
+    const k = (e.target as HTMLElement).closest<HTMLElement>(".kcard");
+    if (!k) return;
+    dragId = k.dataset.id!;
+    e.dataTransfer?.setData("text/plain", dragId);
+    if (e.dataTransfer) e.dataTransfer.effectAllowed = "move";
+    k.classList.add("is-dragging");
+  });
+  root.addEventListener("dragend", () => {
+    dragId = "";
+    root.querySelectorAll(".is-dragging, .is-over").forEach((n) => n.classList.remove("is-dragging", "is-over"));
+  });
+  root.addEventListener("dragover", (e) => {
+    const col = (e.target as HTMLElement).closest<HTMLElement>(".kcol");
+    if (!col || !dragId) return;
+    e.preventDefault();
+    root.querySelectorAll(".is-over").forEach((n) => n !== col && n.classList.remove("is-over"));
+    col.classList.add("is-over");
+  });
+  root.addEventListener("drop", (e) => {
+    const col = (e.target as HTMLElement).closest<HTMLElement>(".kcol");
+    if (!col || !dragId) return;
+    e.preventDefault();
+    const id = dragId;
+    dragId = "";
+    void moveLead(id, col.dataset.col as Status);
   });
 }
-
-let built = false;
 
 export function initLeads(h: Hooks) {
   hooks = h;
 }
 
-/** Busca os leads e desenha a aba. Devolve a quantidade de leads novos. */
+/** Para a atualização automática e limpa o que estava na tela (ao sair do painel). */
+export function stopLeads() {
+  clearInterval(timer);
+  timer = undefined;
+  leads = [];
+  known = null;
+  signature = "";
+  fresh = new Set();
+  visible = {};
+  if (baseTitle) document.title = baseTitle;
+  if (built) {
+    if (dialog().open) dialog().close();
+    paintAll();
+  }
+}
+
+/** Busca os leads, desenha a aba e liga a atualização automática. */
 export async function loadLeads(): Promise<void> {
-  const root = document.getElementById("leads-content")!;
-  if (!built) { skeleton(root); built = true; }
-  const data = await api("GET");
-  leads = data.leads as Lead[];
-  paintChips();
-  paintList();
+  const root = $("leads-content");
+  if (!built) {
+    try {
+      const saved = window.localStorage.getItem(MODE_KEY);
+      mode = saved === "lista" || saved === "quadro" ? saved : window.innerWidth < 900 ? "lista" : "quadro";
+    } catch {
+      mode = window.innerWidth < 900 ? "lista" : "quadro";
+    }
+    skeleton(root);
+    built = true;
+  }
+  await refresh(true);
+  if (timer === undefined) timer = window.setInterval(() => void tick(), POLL_MS);
 }

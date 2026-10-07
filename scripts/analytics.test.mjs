@@ -155,3 +155,19 @@ test("lead: limita envios repetidos pelo mesmo IP", async () => {
   for (let i = 0; i < 9; i++) await postLead({ ...GOOD, name: `Pessoa ${i}` }, { ip: "200.7.7.7" });
   assert.equal((await (await leadsApi()).json()).total, 6);
 });
+
+test("lead: consulta leve (peek) avisa quando chega ou sai lead", async () => {
+  resetMemoryStore();
+  const peek = async () => (await leadsApi("GET", { query: "?peek=1" })).json();
+  assert.deepEqual(await peek(), { total: 0, latest: "" });
+  await postLead(GOOD);
+  const a = await peek();
+  assert.equal(a.total, 1);
+  assert.match(a.latest, /^[a-f0-9]{16}$/);
+  await new Promise((r) => setTimeout(r, 5));
+  await postLead({ ...GOOD, name: "Outra Pessoa" }, { ip: "200.6.6.6" });
+  const b = await peek();
+  assert.equal(b.total, 2);
+  assert.notEqual(b.latest, a.latest);
+  assert.equal((await leadsApi("GET", { query: "?peek=1", senha: "errada" })).status, 401);
+});
