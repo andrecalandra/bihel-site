@@ -1,5 +1,7 @@
 import { useState, type FormEvent } from "react";
 import { track } from "../analytics";
+import { sendLead } from "../lead";
+import { asset } from "../asset";
 
 type Status = "idle" | "redirecting";
 
@@ -51,7 +53,17 @@ export default function QuoteForm({
     track("whatsapp_click", "Formulário de orçamento", service);
     const url = buildWhatsAppUrl(whatsappNumber, formData);
 
+    // o WhatsApp abre primeiro (precisa ser direto do clique); o registro no painel vai em paralelo
     window.open(url, "_blank", "noopener,noreferrer");
+    const field = (key: string) => String(formData.get(key) || "").trim();
+    sendLead({
+      name: field("name"),
+      phone: field("phone"),
+      email: field("email"),
+      service,
+      message: field("message"),
+      website: field("website"),
+    });
     form.reset();
     setTimeout(() => setStatus("idle"), 2500);
   }
@@ -95,9 +107,20 @@ export default function QuoteForm({
         />
       </div>
 
+      {/* isca anti-robô: invisível para pessoas */}
+      <div className="form-honeypot" aria-hidden="true">
+        <label htmlFor="website">Não preencha este campo</label>
+        <input id="website" name="website" type="text" tabIndex={-1} autoComplete="off" />
+      </div>
+
       <button type="submit" className="btn btn--primary btn--lg btn--block" disabled={status === "redirecting"}>
         {status === "redirecting" ? "Abrindo WhatsApp..." : "Solicitar proposta"}
       </button>
+
+      <p className="form-privacy">
+        Ao enviar, você autoriza a Bihel a usar esses dados para responder ao seu pedido.{" "}
+        <a href={asset("privacidade")}>Política de Privacidade</a>
+      </p>
 
       {status === "redirecting" && (
         <p className="form-feedback form-feedback--success">

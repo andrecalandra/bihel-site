@@ -48,15 +48,28 @@
       </section>
 
       <section id="dashboard" hidden>
-        <div class="toolbar">
-          <div class="tabs" role="tablist" aria-label="Período">
-            <button type="button" role="tab" data-days="7" aria-selected="true">Últimos 7 dias</button>
-            <button type="button" role="tab" data-days="30" aria-selected="false">Últimos 30 dias</button>
-            <button type="button" role="tab" data-days="90" aria-selected="false">Últimos 90 dias</button>
-          </div>
-          <span id="updated" class="muted"></span>
+        <div class="views" role="tablist" aria-label="Seção do painel">
+          <button type="button" role="tab" data-view="visitas" aria-selected="true">Visitas</button>
+          <button type="button" role="tab" data-view="leads" aria-selected="false">
+            Leads <span id="leads-badge" class="badge" hidden title="Leads novos"></span>
+          </button>
         </div>
-        <div id="content" aria-live="polite"></div>
+
+        <div id="visits-view">
+          <div class="toolbar">
+            <div class="tabs" role="tablist" aria-label="Período">
+              <button type="button" role="tab" data-days="7" aria-selected="true">Últimos 7 dias</button>
+              <button type="button" role="tab" data-days="30" aria-selected="false">Últimos 30 dias</button>
+              <button type="button" role="tab" data-days="90" aria-selected="false">Últimos 90 dias</button>
+            </div>
+            <span id="updated" class="muted"></span>
+          </div>
+          <div id="content" aria-live="polite"></div>
+        </div>
+
+        <div id="leads-view" hidden>
+          <div id="leads-content"></div>
+        </div>
       </section>
 
       <p id="status" class="status" hidden></p>

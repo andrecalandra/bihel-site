@@ -4,8 +4,10 @@ import http from "node:http";
 import { pathToFileURL } from "node:url";
 import collect from "../api/collect.js";
 import stats from "../api/stats.js";
+import lead from "../api/lead.js";
+import leads from "../api/leads.js";
 
-const routes = { "/api/collect": collect, "/api/stats": stats };
+const routes = { "/api/collect": collect, "/api/stats": stats, "/api/lead": lead, "/api/leads": leads };
 
 export function createServer() {
   return http.createServer(async (req, res) => {

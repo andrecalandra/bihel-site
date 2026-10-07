@@ -1,4 +1,5 @@
 import "./painel.css";
+import { AuthError, initLeads, loadLeads } from "./leads";
 
 interface Ranked { name: string; count: number; contacts?: number }
 interface Daily { date: string; views: number; visitors: number; contacts: number }
@@ -30,6 +31,7 @@ const logoutBtn = $("logout");
 
 let days = 7;
 let password = "";
+let leadsLoaded = false;
 
 const nf = new Intl.NumberFormat("pt-BR");
 const esc = (s: string) =>
@@ -54,8 +56,6 @@ function show(view: "login" | "dashboard" | "status", message = "", problem = fa
   statusEl.textContent = message;
   statusEl.classList.toggle("problem", problem);
 }
-
-class AuthError extends Error {}
 
 async function fetchStats(): Promise<Stats> {
   let res: Response;
@@ -220,6 +220,11 @@ async function load() {
     const stats = await fetchStats();
     show("dashboard");
     render(stats);
+    if (!leadsLoaded) {
+      // carrega os leads já no começo, para o aviso de "novos" aparecer na aba
+      leadsLoaded = true;
+      loadLeads().catch(() => { leadsLoaded = false; });
+    }
   } catch (err) {
     if (err instanceof AuthError) {
       forget();
@@ -251,8 +256,33 @@ $("login-form").addEventListener("submit", async (event) => {
   if (!dashboard.hidden) save(password, ($("remember") as HTMLInputElement).checked);
 });
 
+function backToLogin(message = "") {
+  forget();
+  leadsLoaded = false;
+  show("login");
+  showLoginError(message);
+}
+initLeads({ password: () => password, onAuthError: backToLogin });
+
+document.querySelectorAll<HTMLButtonElement>(".views button").forEach((btn) => {
+  btn.addEventListener("click", () => {
+    const view = btn.dataset.view;
+    document.querySelectorAll(".views button").forEach((b) => b.setAttribute("aria-selected", String(b === btn)));
+    $("visits-view").hidden = view !== "visitas";
+    $("leads-view").hidden = view !== "leads";
+    tip.hidden = true;
+    if (view === "leads") {
+      loadLeads().catch((err) => {
+        if (err instanceof AuthError) backToLogin(err.message);
+        else $("leads-content").innerHTML = `<p class="status problem">${esc((err as Error).message)}</p>`;
+      });
+    }
+  });
+});
+
 logoutBtn.addEventListener("click", () => {
   forget();
+  leadsLoaded = false;
   password = "";
   ($("password") as HTMLInputElement).value = "";
   show("login");

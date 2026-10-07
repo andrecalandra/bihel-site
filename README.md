@@ -40,3 +40,9 @@ o painel (`/painel`) lê `GET /api/stats?days=7|30|90` com a senha em `Authoriza
 - Local: `npm run dev:api` (memória, senha `teste`) junto com `npm run dev`, depois abra `/painel.html`.
 - Testes da API: `npm run test:api`.
 - Eventos medidos: visita, `whatsapp_click`, `form_submit`, `service_open`, `section_view` (lista em `api/_lib.js`).
+
+### Leads (pedidos de orçamento)
+
+O formulário do site abre o WhatsApp e, em paralelo, envia os dados para `POST /api/lead`. A equipe vê e gerencia
+tudo na aba **Leads** do painel (`/api/leads`: GET lista, PATCH muda situação/observação, DELETE exclui; mesma senha).
+Os leads ficam 12 meses no Redis e depois são apagados sozinhos (`LEAD_RETENTION_DAYS` em `api/_lib.js`).

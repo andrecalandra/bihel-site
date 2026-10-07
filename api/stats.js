@@ -1,6 +1,6 @@
 // GET /api/stats?days=7|30|90 — números do painel. Protegido por senha (DASHBOARD_PASSWORD).
 import {
-  dayKey, ipHash, lastDays, passwordMatches, pipeline, pipelineChunked, send, storeConfigured,
+  authorize, dayKey, lastDays, pipelineChunked, send,
 } from "./_lib.js";
 
 const PERIODS = new Set([7, 30, 90]);
@@ -29,25 +29,8 @@ const ranked = (obj, limit = 10) =>
 
 export default async function handler(req, res) {
   if (req.method !== "GET") return send(res, 405, { erro: "método não permitido" }, { Allow: "GET" });
-  if (!process.env.DASHBOARD_PASSWORD) {
-    return send(res, 503, { erro: "Painel sem senha configurada. Defina DASHBOARD_PASSWORD na Vercel." });
-  }
-  if (!storeConfigured()) {
-    return send(res, 503, { erro: "Armazenamento não configurado. Conecte um banco Redis (Upstash) ao projeto na Vercel." });
-  }
-
   try {
-    // trava tentativas de senha: 10 erros em 15 minutos por origem
-    const failKey = `rl:auth:${ipHash(req)}`;
-    const [fails] = await pipeline([["GET", failKey]]);
-    if (Number(fails) >= 10) return send(res, 429, { erro: "Muitas tentativas. Aguarde alguns minutos." });
-
-    const bearer = String(req.headers.authorization || "").replace(/^Bearer\s+/i, "");
-    if (!passwordMatches(bearer)) {
-      await pipeline([["INCR", failKey], ["EXPIRE", failKey, 900]]);
-      await new Promise((r) => setTimeout(r, 400));
-      return send(res, 401, { erro: "Senha incorreta." });
-    }
+    if (!(await authorize(req, res))) return;
 
     const days = Number(new URL(req.url, "http://x").searchParams.get("days")) || 7;
     if (!PERIODS.has(days)) return send(res, 400, { erro: "Período inválido." });

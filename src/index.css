@@ -666,6 +666,8 @@ body {
 }
 .form-field textarea { resize: vertical; min-height: 100px; }
 .form-honeypot { position: absolute; left: -9999px; opacity: 0; pointer-events: none; }
+.form-privacy { margin-top: 14px; font-size: 0.78rem; line-height: 1.55; color: var(--gray-500); text-align: center; }
+.form-privacy a { color: var(--navy-600); text-decoration: underline; }
 .form-feedback { margin-top: 16px; padding: 14px 16px; border-radius: 10px; font-size: 0.9rem; }
 .form-feedback--success { background: rgba(16, 185, 129, 0.12); color: #047857; }
 .form-feedback--error { background: rgba(239, 68, 68, 0.12); color: #b91c1c; }

@@ -37,11 +37,12 @@ export async function pipeline(commands) {
 }
 
 // Emulação mínima do Redis (só os comandos usados) para desenvolvimento local e testes.
-const mem = { str: new Map(), hash: new Map(), hll: new Map() };
+const mem = { str: new Map(), hash: new Map(), hll: new Map(), zset: new Map() };
 export function resetMemoryStore() {
   mem.str.clear();
   mem.hash.clear();
   mem.hll.clear();
+  mem.zset.clear();
 }
 function memoryPipeline(commands) {
   return commands.map(([cmd, key, ...args]) => {
@@ -51,6 +52,28 @@ function memoryPipeline(commands) {
         return mem.str.get(key);
       case "GET":
         return mem.str.has(key) ? String(mem.str.get(key)) : null;
+      case "MGET":
+        return [key, ...args].map((k) => (mem.str.has(k) ? String(mem.str.get(k)) : null));
+      case "SET":
+        mem.str.set(key, args[0]);
+        return "OK";
+      case "DEL":
+        return [key, ...args].reduce((n, k) => n + Number(mem.str.delete(k)), 0);
+      case "ZADD": {
+        const z = mem.zset.get(key) ?? new Map();
+        z.set(args[1], Number(args[0]));
+        mem.zset.set(key, z);
+        return 1;
+      }
+      case "ZREM": {
+        const z = mem.zset.get(key);
+        return args.reduce((n, m) => n + Number(Boolean(z?.delete(m))), 0);
+      }
+      case "ZREVRANGE": {
+        const z = [...(mem.zset.get(key) ?? [])].sort((a, b) => b[1] - a[1]).map(([m]) => m);
+        const stop = Number(args[1]);
+        return z.slice(Number(args[0]), stop < 0 ? undefined : stop + 1);
+      }
       case "EXPIRE":
         return 1;
       case "HINCRBY": {
@@ -209,3 +232,69 @@ export function passwordMatches(given) {
   const b = createHash("sha256").update(expected).digest();
   return timingSafeEqual(a, b);
 }
+
+/**
+ * Confere a senha do painel (com trava de tentativas). Responde sozinho em caso de erro
+ * e devolve false; quem chama só segue se receber true.
+ */
+export async function authorize(req, res) {
+  if (!process.env.DASHBOARD_PASSWORD) {
+    send(res, 503, { erro: "Painel sem senha configurada. Defina DASHBOARD_PASSWORD na Vercel." });
+    return false;
+  }
+  if (!storeConfigured()) {
+    send(res, 503, { erro: "Armazenamento não configurado. Conecte um banco Redis (Upstash) ao projeto na Vercel." });
+    return false;
+  }
+  // trava tentativas de senha: 10 erros em 15 minutos por origem
+  const failKey = `rl:auth:${ipHash(req)}`;
+  const [fails] = await pipeline([["GET", failKey]]);
+  if (Number(fails) >= 10) {
+    send(res, 429, { erro: "Muitas tentativas. Aguarde alguns minutos." });
+    return false;
+  }
+  const bearer = String(req.headers.authorization || "").replace(/^Bearer\s+/i, "");
+  if (!passwordMatches(bearer)) {
+    await pipeline([["INCR", failKey], ["EXPIRE", failKey, 900]]);
+    await new Promise((r) => setTimeout(r, 400));
+    send(res, 401, { erro: "Senha incorreta." });
+    return false;
+  }
+  return true;
+}
+
+// ---------- leads (pedidos de orçamento) ----------
+export const LEAD_RETENTION_DAYS = 365;
+export const LEAD_STATUSES = ["novo", "contato", "orcamento", "fechado", "perdido"];
+
+/** Texto livre (mensagem/observação): mantém acentos e quebras de linha, tira caracteres de controle. */
+export function cleanText(value, max) {
+  return String(value ?? "")
+    .normalize("NFC")
+    // eslint-disable-next-line no-control-regex
+    .replace(/[\u0000-\u0008\u000B\u000C\u000E-\u001F\u007F]/g, "")
+    .replace(/\r\n?/g, "\n")
+    .trim()
+    .slice(0, max);
+}
+
+/** Valida e limpa o que veio do formulário. Devolve null se não der para aproveitar. */
+export function parseLead(raw) {
+  const name = cleanText(raw?.name, 80).replace(/\s+/g, " ");
+  const phone = String(raw?.phone ?? "").replace(/[^\d+()\- ]/g, "").trim().slice(0, 25);
+  const digits = phone.replace(/\D/g, "");
+  if (name.length < 2 || digits.length < 8 || digits.length > 15) return null;
+  const email = String(raw?.email ?? "").trim().slice(0, 120);
+  return {
+    name,
+    phone,
+    email: /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email) ? email : "",
+    service: cleanLabel(raw?.service, 80),
+    message: cleanText(raw?.message, 1000),
+  };
+}
+
+/** Segundos que faltam para o lead completar o prazo de guarda. */
+export const leadTtl = (createdAt) =>
+  Math.max(60, Math.floor((createdAt + LEAD_RETENTION_DAYS * 86400000 - Date.now()) / 1000));
+
