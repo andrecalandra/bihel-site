@@ -286,7 +286,7 @@ td:not(:first-child), th:not(:first-child) { text-align: right; font-variant-num
 .seg button { border: none; background: transparent; padding: 8px 20px; border-radius: 999px; font: 600 0.88rem var(--ff-heading); color: var(--gray-500); cursor: pointer; }
 .seg button[aria-pressed="true"] { background: var(--navy-900); color: var(--white); }
 
-.board { display: grid; grid-template-columns: repeat(5, minmax(210px, 1fr)); gap: 12px; align-items: start; overflow-x: auto; padding-bottom: 12px; }
+.board { display: grid; grid-template-columns: repeat(6, minmax(200px, 1fr)); gap: 12px; align-items: start; overflow-x: auto; padding-bottom: 12px; }
 .kcol { background: var(--gray-100); border-radius: 16px; padding: 12px; min-width: 0; border-top: 4px solid var(--gray-200); transition: background 0.15s; }
 .kcol--novo { border-top-color: var(--gold); }
 .kcol--contato { border-top-color: var(--navy-600); }
@@ -333,6 +333,16 @@ td:not(:first-child), th:not(:first-child) { text-align: right; font-variant-num
 .toast--bad { border-left-color: var(--red); }
 
 @media (max-width: 899px) {
-  .board { grid-template-columns: repeat(5, 78vw); scroll-snap-type: x mandatory; }
+  .board { grid-template-columns: repeat(6, 78vw); scroll-snap-type: x mandatory; }
   .kcol { scroll-snap-align: start; }
 }
+
+/* ---------- Suspeitos (possível spam) ---------- */
+.kcol--suspeito { border-top-color: var(--red); background: #fbeeec; }
+.lead--suspeito { border-left-color: var(--red); background: #fffafa; }
+.pill--suspeito { background: #f8d7d3; color: #8c2a1f; }
+.kcard__warn { font-size: 0.74rem; font-weight: 600; color: var(--red); }
+.lead__flags { margin-top: 12px; padding: 10px 14px; background: #fdecea; color: #8c2a1f; border-radius: 12px; font-size: 0.85rem; }
+.lead__flags button { display: block; margin-top: 8px; background: var(--white); border: 2px solid #8c2a1f; color: #8c2a1f; border-radius: 999px; padding: 6px 14px; font: 600 0.8rem var(--ff-body); cursor: pointer; }
+.lead__flags button:hover { background: #8c2a1f; color: var(--white); }
+.clear { margin-left: auto; margin-right: 8px; background: none; border: none; color: var(--red); font: 600 0.75rem var(--ff-body); text-decoration: underline; cursor: pointer; }

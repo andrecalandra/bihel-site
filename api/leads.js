@@ -1,7 +1,7 @@
 // /api/leads — lista e gerencia os pedidos de orçamento. Protegido por senha.
 //   GET                      → { leads: [...], total }   (?peek=1 → { total, latest } só para checar novidades)
 //   PATCH  { id, status?, note? } → lead atualizado
-//   DELETE ?id=...           → apaga o lead
+//   DELETE ?id=... | ?status=suspeito → apaga um lead / todos os suspeitos
 import {
   LEAD_STATUSES, authorize, cleanText, leadTtl, pipeline, readBody, send,
 } from "./_lib.js";
@@ -59,8 +59,25 @@ export default async function handler(req, res) {
       return send(res, 200, lead);
     }
 
-    // DELETE
-    const id = new URL(req.url, "http://x").searchParams.get("id") || "";
+    // DELETE ?status=suspeito → esvazia a coluna de suspeitos de uma vez
+    const params = new URL(req.url, "http://x").searchParams;
+    if (params.get("status") === "suspeito") {
+      const [ids] = await pipeline([["ZREVRANGE", "leads", 0, MAX_LEADS - 1]]);
+      if (!ids?.length) return send(res, 200, { ok: true, removed: 0 });
+      const [raw] = await pipeline([["MGET", ...ids.map((x) => `lead:${x}`)]]);
+      const doomed = ids.filter((_, i) => {
+        try {
+          return raw[i] && JSON.parse(raw[i]).status === "suspeito";
+        } catch {
+          return false;
+        }
+      });
+      if (doomed.length) await pipeline([["DEL", ...doomed.map((x) => `lead:${x}`)], ["ZREM", "leads", ...doomed]]);
+      return send(res, 200, { ok: true, removed: doomed.length });
+    }
+
+    // DELETE ?id=...
+    const id = params.get("id") || "";
     if (!ID_RE.test(id)) return send(res, 400, { erro: "Lead inválido." });
     await pipeline([["DEL", `lead:${id}`], ["ZREM", "leads", id]]);
     return send(res, 200, { ok: true });

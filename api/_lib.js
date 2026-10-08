@@ -55,6 +55,7 @@ function memoryPipeline(commands) {
       case "MGET":
         return [key, ...args].map((k) => (mem.str.has(k) ? String(mem.str.get(k)) : null));
       case "SET":
+        if (args.includes("NX") && mem.str.has(key)) return null;
         mem.str.set(key, args[0]);
         return "OK";
       case "DEL":
@@ -267,7 +268,7 @@ export async function authorize(req, res) {
 
 // ---------- leads (pedidos de orçamento) ----------
 export const LEAD_RETENTION_DAYS = 365;
-export const LEAD_STATUSES = ["novo", "contato", "orcamento", "fechado", "perdido"];
+export const LEAD_STATUSES = ["novo", "contato", "orcamento", "fechado", "perdido", "suspeito"];
 
 /** Texto livre (mensagem/observação): mantém acentos e quebras de linha, tira caracteres de controle. */
 export function cleanText(value, max) {
@@ -294,6 +295,55 @@ export function parseLead(raw) {
     service: cleanLabel(raw?.service, 80),
     message: cleanText(raw?.message, 1000),
   };
+}
+
+// ---------- anti-spam do formulário ----------
+// Nada é apagado por suspeita: o lead entra na coluna "Suspeitos" do painel para a equipe
+// conferir (e só robôs óbvios — campo-isca, excesso por IP — são descartados de vez).
+const tokenSig = (ts, rand) => createHmac("sha256", secret()).update(`lead|${ts}|${rand}`).digest("hex").slice(0, 32);
+
+/** Chave que o site pede ao abrir o formulário e devolve ao enviar: prova que a página foi carregada. */
+export function issueLeadToken() {
+  const ts = Date.now();
+  const rand = createHash("sha256").update(`${ts}${Math.random()}${secret()}`).digest("hex").slice(0, 16);
+  return `${ts}.${rand}.${tokenSig(ts, rand)}`;
+}
+
+/** { ts, rand } se a chave é autêntica; null se faltar ou tiver sido adulterada. */
+export function readLeadToken(token) {
+  const [ts, rand, sig] = String(token ?? "").split(".");
+  if (!/^\d{10,16}$/.test(ts ?? "") || !/^[a-f0-9]{16}$/.test(rand ?? "") || !sig) return null;
+  const a = Buffer.from(sig);
+  const b = Buffer.from(tokenSig(ts, rand));
+  return a.length === b.length && timingSafeEqual(a, b) ? { ts: Number(ts), rand } : null;
+}
+
+const DISPOSABLE = /(^|\.)(mailinator|guerrillamail|10minutemail|tempmail|temp-mail|yopmail|trashmail|sharklasers|throwawaymail|getnada|maildrop|fakeinbox|dispostable)\./i;
+
+/** Telefone brasileiro plausível? (DDD válido, celular com 9, sem repetições/sequências). */
+export function phoneLooksReal(phone) {
+  let d = String(phone).replace(/\D/g, "");
+  if (d.length >= 12 && d.startsWith("55")) d = d.slice(2);
+  if (d.length !== 10 && d.length !== 11) return false;
+  if (!/^[1-9][1-9]/.test(d)) return false; // DDD
+  const number = d.slice(2);
+  if (d.length === 11 && number[0] !== "9") return false;
+  if (new Set(number).size <= 2) return false; // 999999999, 121212121
+  if ("0123456789012".includes(number.slice(-6)) || "9876543210987".includes(number.slice(-6))) return false;
+  return true;
+}
+
+/** Motivos para desconfiar do conteúdo do pedido (lista vazia = parece normal). */
+export function contentFlags(lead) {
+  const flags = [];
+  if (!phoneLooksReal(lead.phone)) flags.push("telefone-estranho");
+  const letters = lead.name.replace(/[^\p{L}]/gu, "");
+  if (/\d|https?:|www\./i.test(lead.name) || letters.length < 2 || !/[aeiouáéíóúâêôãõ]/i.test(letters) || /(.)\1{3,}/.test(lead.name)) {
+    flags.push("nome-estranho");
+  }
+  if (lead.email && DISPOSABLE.test(lead.email.split("@")[1] ?? "")) flags.push("email-descartavel");
+  if (/https?:\/\/|www\./i.test(lead.message)) flags.push("link-na-mensagem");
+  return flags;
 }
 
 /** Segundos que faltam para o lead completar o prazo de guarda. */

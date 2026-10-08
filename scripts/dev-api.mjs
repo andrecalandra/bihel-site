@@ -6,8 +6,9 @@ import collect from "../api/collect.js";
 import stats from "../api/stats.js";
 import lead from "../api/lead.js";
 import leads from "../api/leads.js";
+import leadToken from "../api/lead-token.js";
 
-const routes = { "/api/collect": collect, "/api/stats": stats, "/api/lead": lead, "/api/leads": leads };
+const routes = { "/api/collect": collect, "/api/stats": stats, "/api/lead": lead, "/api/leads": leads, "/api/lead-token": leadToken };
 
 export function createServer() {
   return http.createServer(async (req, res) => {

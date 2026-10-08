@@ -13,9 +13,10 @@ interface Lead {
   source: string;
   city: string;
   status: Status;
+  flags?: string[];
   note: string;
 }
-type Status = "novo" | "contato" | "orcamento" | "fechado" | "perdido";
+type Status = "novo" | "contato" | "orcamento" | "fechado" | "perdido" | "suspeito";
 type Mode = "quadro" | "lista";
 
 const STATUSES: [Status, string][] = [
@@ -24,8 +25,21 @@ const STATUSES: [Status, string][] = [
   ["orcamento", "Orçamento enviado"],
   ["fechado", "Fechado"],
   ["perdido", "Perdido"],
+  ["suspeito", "Suspeitos"],
 ];
 const LABEL = Object.fromEntries(STATUSES) as Record<Status, string>;
+const FLAG_LABEL: Record<string, string> = {
+  "sem-chave": "enviado sem abrir a página do site",
+  "rapido-demais": "preenchido rápido demais",
+  "chave-vencida": "página aberta há muitas horas",
+  "chave-reusada": "mesmo envio repetido",
+  "telefone-estranho": "telefone fora do padrão brasileiro",
+  "nome-estranho": "nome com aparência estranha",
+  "email-descartavel": "e-mail temporário",
+  "link-na-mensagem": "link na mensagem",
+  "telefone-repetido": "telefone já enviado nas últimas 24 h",
+  "excesso-de-envios": "muitos envios ao mesmo tempo",
+};
 
 const POLL_MS = 45_000;
 const PAGE_BOARD = 6; // cards por coluna antes de "Ver mais"
@@ -116,6 +130,8 @@ function card(l: Lead): string {
       ${l.email ? `<a class="act" href="mailto:${esc(l.email)}">${esc(l.email)}</a>` : ""}
     </div>
     ${l.message ? `<p class="lead__msg">${esc(l.message)}</p>` : ""}
+    ${l.status === "suspeito" ? `<p class="lead__flags">⚠ Pode ser envio falso: ${esc((l.flags ?? []).map((f) => FLAG_LABEL[f] ?? f).join("; ") || "sem detalhes")}.
+      <button type="button" data-notspam>Não é spam, mover para Novo</button></p>` : ""}
     <div class="lead__foot">
       <label>Situação <select data-status>${options}</select></label>
       <label class="lead__note">Observação <textarea data-note rows="2" maxlength="1000" placeholder="Ex.: liguei, enviei proposta de R$…">${esc(l.note)}</textarea></label>
@@ -129,6 +145,7 @@ function card(l: Lead): string {
 function kcard(l: Lead): string {
   return `<div class="kcard${fresh.has(l.id) ? " is-fresh" : ""}" draggable="true" data-id="${l.id}" tabindex="0" role="button" aria-label="Abrir ${esc(l.name)}">
     <div class="kcard__top"><b>${esc(l.name)}</b><time>${when(l.createdAt)}</time></div>
+    ${l.status === "suspeito" ? `<span class="kcard__warn">⚠ ${esc((l.flags ?? []).map((f) => FLAG_LABEL[f] ?? f)[0] ?? "suspeito")}</span>` : ""}
     ${l.service ? `<span class="kcard__svc">${esc(l.service)}</span>` : ""}
     ${l.message ? `<p class="kcard__msg">${esc(l.message)}</p>` : ""}
     <div class="kcard__row">
@@ -151,7 +168,7 @@ function paintBoard() {
       ? col.slice(0, limit).map(kcard).join("") + more(s, col.length - limit)
       : `<p class="kempty">${query ? "Nenhum resultado" : "Arraste um lead até aqui"}</p>`;
     return `<section class="kcol kcol--${s}" data-col="${s}" aria-label="${label}">
-      <header><h3>${label}</h3><span class="kcount">${col.length}</span></header>
+      <header><h3>${label}</h3>${s === "suspeito" && col.length ? `<button type="button" class="clear" data-clearspam title="Apagar todos os suspeitos">Apagar todos</button>` : ""}<span class="kcount">${col.length}</span></header>
       <div class="kcol__body">${body}</div>
     </section>`;
   }).join("");
@@ -285,9 +302,9 @@ async function refresh(initial = false) {
   const data = await api("GET");
   const next = data.leads as Lead[];
   if (known) {
-    const arrived = next.filter((l) => !known!.has(l.id));
+    const arrived = next.filter((l) => !known!.has(l.id) && l.status === "novo");
+    next.filter((l) => !known!.has(l.id)).forEach((l) => fresh.add(l.id));
     if (arrived.length) {
-      arrived.forEach((l) => fresh.add(l.id));
       toast(arrived.length === 1 ? `Chegou um novo lead: ${arrived[0].name}` : `Chegaram ${arrived.length} novos leads`);
     }
   }
@@ -360,6 +377,29 @@ function skeleton(root: HTMLElement) {
     }
     if (t.closest("#lead-export")) { exportCsv(); return; }
     if (t === dialog() || t.closest("[data-close]")) { dialog().close(); return; }
+
+    const notSpam = t.closest<HTMLElement>("[data-notspam]");
+    if (notSpam) {
+      const id = notSpam.closest<HTMLElement>("[data-id]")?.dataset.id;
+      if (id) { if (dialog().open) dialog().close(); void moveLead(id, "novo"); }
+      return;
+    }
+    if (t.closest("[data-clearspam]")) {
+      const n = leads.filter((l) => l.status === "suspeito").length;
+      if (!n || !window.confirm(`Apagar ${n} lead(s) suspeito(s)? Isso não pode ser desfeito.`)) return;
+      try {
+        await api("DELETE", "?status=suspeito");
+        leads = leads.filter((l) => l.status !== "suspeito");
+        known = new Set(leads.map((l) => l.id));
+        repaint();
+        signature = sig(await api("GET", "?peek=1"));
+        toast("Suspeitos apagados.");
+      } catch (err) {
+        if (err instanceof AuthError) hooks.onAuthError(err.message);
+        else toast((err as Error).message, true);
+      }
+      return;
+    }
 
     const del = t.closest<HTMLElement>("[data-del]");
     if (del) {

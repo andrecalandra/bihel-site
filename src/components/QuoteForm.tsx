@@ -1,6 +1,6 @@
-import { useState, type FormEvent } from "react";
+import { useEffect, useState, type FormEvent } from "react";
 import { track } from "../analytics";
-import { sendLead } from "../lead";
+import { ensureFreshKey, refreshLeadKey, sendLead } from "../lead";
 import { asset } from "../asset";
 
 type Status = "idle" | "redirecting";
@@ -41,6 +41,13 @@ export default function QuoteForm({
     : "Outro / não sei ainda";
 
   const [status, setStatus] = useState<Status>("idle");
+
+  // pede a chave anti-robô ao abrir a página e a mantém fresca enquanto a aba estiver aberta
+  useEffect(() => {
+    void refreshLeadKey();
+    const timer = setInterval(ensureFreshKey, 10 * 60 * 1000);
+    return () => clearInterval(timer);
+  }, []);
 
   function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
