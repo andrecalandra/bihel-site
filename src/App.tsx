@@ -91,7 +91,7 @@ export default function App() {
         <section className="hero">
           <div className="container hero__inner">
             <div className="hero__content hero-in">
-              <span className="eyebrow">Engenharia para condomínios em Niterói</span>
+              <span className="eyebrow">Engenharia para condomínios</span>
               <h1>Segurança e transparência para o seu condomínio, do laudo à obra.</h1>
               <p className="hero__lead">
                 A Bihel Engenharia oferece autovistoria predial, inspeção de fachada com drone,
