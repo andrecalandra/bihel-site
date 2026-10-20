@@ -90,10 +90,10 @@ Entre em contato conosco e descubra como a inspeção termográfica com drone po
   },
   {
     title: "Gestão e Fiscalização de Obras",
-    slug: "gestao-fiscalizacao-obras-niteroi",
-    pageTitle: "Gestão e Fiscalização de Obras em Niterói | Bihel Engenharia",
-    h1: "Gestão e Fiscalização de Obras em Niterói",
-    metaDescription: "Gestão e fiscalização de obras para condomínios em Niterói: escopo, licitação, equalização de propostas e acompanhamento da execução conforme normas técnicas.",
+    slug: "gestao-fiscalizacao-obras",
+    pageTitle: "Gestão e Fiscalização de Obras para Condomínios | Bihel Engenharia",
+    h1: "Gestão e Fiscalização de Obras",
+    metaDescription: "Gestão e fiscalização de obras para condomínios: escopo, licitação, equalização de propostas e acompanhamento da execução conforme normas técnicas. Peça orçamento.",
     lead: "Do escopo à fiscalização: elaboramos a documentação, conduzimos a licitação, comparamos propostas e acompanhamos a obra executada por terceiros.",
     desc: "Seu projeto executado com excelência, dentro do prazo e orçamento estabelecidos.",
     details: `Na Bihel Engenharia, oferecemos serviços especializados em gestão e fiscalização de obras, garantindo que seu projeto seja executado com excelência, dentro do prazo e orçamento estabelecidos. Nossa expertise abrange:
@@ -129,10 +129,10 @@ Na Bihel Engenharia, nosso compromisso é assegurar que seu projeto seja executa
   },
   {
     title: "Elaboração de Projetos Personalizados",
-    slug: "projetos-personalizados-niteroi",
-    pageTitle: "Elaboração de Projetos Personalizados em Niterói | Bihel",
-    h1: "Elaboração de Projetos Personalizados em Niterói",
-    metaDescription: "Projetos de engenharia e arquitetura sob medida para condomínios e edifícios em Niterói, com equipe multidisciplinar de engenheiros e arquitetos.",
+    slug: "projetos-personalizados",
+    pageTitle: "Elaboração de Projetos Personalizados | Bihel Engenharia",
+    h1: "Elaboração de Projetos Personalizados",
+    metaDescription: "Projetos de engenharia e arquitetura sob medida para condomínios e edifícios, com equipe multidisciplinar de engenheiros e arquitetos. Peça orçamento.",
     lead: "Projetos de engenharia e arquitetura desenvolvidos sob medida para a necessidade do seu condomínio, com equipe multidisciplinar e atenção às normas da ABNT.",
     desc: "Projetos personalizados de engenharia e arquitetura, desenvolvidos sob medida para a necessidade do seu condomínio.",
     details: `Na Bihel Engenharia, nossa expertise em desenvolvimento de projetos de engenharia e arquitetura transforma visões em realidade. Oferecemos soluções personalizadas e inovadoras para atender às necessidades específicas de cada cliente.
@@ -176,10 +176,10 @@ Na Bihel Engenharia, não apenas elaboramos projetos, mas criamos soluções que
   },
   {
     title: "Consultoria em Engenharia Condominial",
-    slug: "consultoria-engenharia-condominial-niteroi",
-    pageTitle: "Consultoria em Engenharia Condominial em Niterói | Bihel",
-    h1: "Consultoria em Engenharia Condominial em Niterói",
-    metaDescription: "Consultoria em engenharia condominial em Niterói: suporte mensal à gestão, programa de manutenção (NBR 5.674), laudos de recebimento e de garantia de obras.",
+    slug: "consultoria-engenharia-condominial",
+    pageTitle: "Consultoria em Engenharia Condominial | Bihel Engenharia",
+    h1: "Consultoria em Engenharia Condominial",
+    metaDescription: "Consultoria em engenharia condominial: suporte mensal à gestão, programa de manutenção (NBR 5.674), laudos de recebimento e de garantia de obras. Peça orçamento.",
     lead: "Suporte técnico contínuo para síndicos, administradoras e proprietários: gestão, plano de manutenção, laudos de recebimento e de garantia de obras.",
     desc: "Consultoria em engenharia condominial para síndicos, administradores e proprietários de imóveis.",
     details: `Na Bihel Engenharia, oferecemos uma gama abrangente de serviços de consultoria técnica, projetados para atender às necessidades específicas de síndicos, administradores e proprietários de imóveis. Nossa expertise técnica e abordagem inovadora garantem soluções eficazes e personalizadas para cada cliente.
