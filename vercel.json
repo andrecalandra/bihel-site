@@ -21,6 +21,12 @@
     }
   ],
   "redirects": [
+    {
+      "source": "/(.*)",
+      "has": [{ "type": "host", "value": "bihel-site.vercel.app" }],
+      "destination": "https://www.bihel.com.br/$1",
+      "permanent": true
+    },
     { "source": "/home", "destination": "/", "permanent": true },
     { "source": "/index.php", "destination": "/", "permanent": true },
     { "source": "/sobre-nos", "destination": "/#sobre", "permanent": true },
