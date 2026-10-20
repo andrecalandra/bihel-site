@@ -2,8 +2,8 @@ import { useState } from "react";
 import { asset } from "../asset";
 
 /** Endereço como aparece no site (mesmo texto do rodapé). */
-export const ADDRESS_TEXT = "Rua Noronha Torrezão 24, (1714) Santa Rosa, Niterói - RJ";
-// Para os mapas usamos só rua e número: o Google acha o ponto exato sem o complemento.
+export const ADDRESS_TEXT = "Rua Noronha Torrezão 24, sala 1714, Santa Rosa, Niterói - RJ";
+// Para os mapas usamos só rua e número: o Google acha o ponto exato sem a sala.
 const ADDRESS_QUERY = "Rua Noronha Torrezão 24, Santa Rosa, Niterói - RJ";
 
 const DIRECTIONS_URL = `https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(ADDRESS_QUERY)}`;
