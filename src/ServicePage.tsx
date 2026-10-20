@@ -137,7 +137,7 @@ export default function ServicePage({ slug }: { slug: string }) {
             <aside className="svc-aside" aria-label="Solicitar orçamento">
               <div className="svc-aside__card">
                 <h2>Peça seu orçamento</h2>
-                <p>Atendemos condomínios e edifícios em Niterói e região. Resposta rápida da nossa equipe técnica.</p>
+                <p>Atendimento técnico para condomínios e edifícios. Resposta rápida da nossa equipe.</p>
                 <a className="btn btn--primary btn--block" href={quoteHref}>
                   Solicitar orçamento
                 </a>
