@@ -7,7 +7,7 @@ import { getConsent } from "./consent";
 const OPT_OUT_KEY = "bihel_sem_registro";
 const HOSTS = ["bihel-site.vercel.app", "www.bihel.com.br", "bihel.com.br"];
 
-const SECTIONS = ["sobre", "servicos", "diferenciais", "equipe", "depoimentos", "orcamento"];
+const SECTIONS = ["sobre", "servicos", "diferenciais", "equipe", "depoimentos", "orcamento", "localizacao"];
 
 type EventName = "whatsapp_click" | "form_submit" | "service_open" | "section_view";
 

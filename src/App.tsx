@@ -5,6 +5,7 @@ import TestimonialsCarousel from "./components/TestimonialsCarousel";
 import { asset } from "./asset";
 import ServiceModal from "./components/ServiceModal";
 import TeamSection from "./components/TeamSection";
+import LocationSection, { ADDRESS_TEXT } from "./components/LocationSection";
 import CookieBanner from "./components/CookieBanner";
 import { CONSENT_OPEN_EVENT } from "./consent";
 import { HAS_TEAM } from "./team";
@@ -539,6 +540,8 @@ export default function App() {
             </div>
           </div>
         </section>
+
+        <LocationSection whatsappHref={WHATSAPP_HREF} />
       </main>
 
       <footer className="footer" id="contato">
@@ -566,6 +569,7 @@ export default function App() {
             <a href="#diferenciais">Diferenciais</a>
             {HAS_TEAM && <a href="#equipe">Nossa equipe</a>}
             <a href="#depoimentos">Depoimentos</a>
+            <a href="#localizacao">Onde estamos</a>
           </div>
 
           <div className="footer__col">
@@ -579,7 +583,7 @@ export default function App() {
 
           <div className="footer__col">
             <h4>Fale Conosco</h4>
-            <p className="footer__contact"><strong>Endereço:</strong> Rua Noronha Torrezão 24, (1714) Santa Rosa, Niterói - RJ</p>
+            <p className="footer__contact"><strong>Endereço:</strong> {ADDRESS_TEXT}</p>
           </div>
         </div>
 

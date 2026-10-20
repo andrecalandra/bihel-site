@@ -11,6 +11,7 @@ const SECTION_NAMES = {
   equipe: "Equipe",
   depoimentos: "Depoimentos",
   orcamento: "Formulário de orçamento",
+  localizacao: "Onde estamos (mapa)",
 };
 
 const toObject = (flat) => {
