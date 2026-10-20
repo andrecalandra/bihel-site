@@ -6,7 +6,7 @@ para o Google em `bihel-site.vercel.app` (de propósito).
 ## O que a branch `lancamento` muda
 - Remove o bloqueio de indexação (`noindex`) do HTML e do cabeçalho do servidor.
 - Troca canonical, `og:url`, imagens de compartilhamento e dados estruturados para `https://www.bihel.com.br`.
-- Libera para o Google as **5 páginas dos serviços** (`/autovistoria-predial-niteroi`, `/inspecao-fachada-drone`,
+- Libera para o Google as **5 páginas dos serviços** (`/autovistoria-predial`, `/inspecao-fachada-drone`,
   `/gestao-fiscalizacao-obras`, `/projetos-personalizados`, `/consultoria-engenharia-condominial`).
   Elas já existem hoje em `bihel-site.vercel.app`, bloqueadas como o resto do site. O interruptor está em `src/site.ts`
   (`SITE_URL` e `INDEXABLE`).
