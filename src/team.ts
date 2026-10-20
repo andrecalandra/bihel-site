@@ -21,7 +21,7 @@ const BASE_TEAM: TeamMember[] = [
   },
   {
     // foto: IMG_0446 (cabelo claro, camisa preta)
-    name: "Ingrid Glória",
+    name: "Ingridi Gloria",
     role: "Trainee de Arquitetura",
     img: asset("assets/equipe/IMG_0446.webp"),
   },
