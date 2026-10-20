@@ -15,14 +15,14 @@ const BASE_TEAM: TeamMember[] = [
   },
   {
     // foto: IMG_0446 (cabelo claro, camisa preta)
-    name: "Kamila Silva",
-    role: "Engenheira Civil",
+    name: "Ingrid Glória",
+    role: "Trainee de Arquitetura",
     img: asset("assets/equipe/IMG_0446.webp"),
   },
   {
     // foto: IMG_0451 (cabelo liso escuro, camisa preta)
-    name: "Ingrid Glória",
-    role: "Trainee de Arquitetura",
+    name: "Kamila Silva",
+    role: "Engenheira Civil",
     img: asset("assets/equipe/IMG_0451.webp"),
   },
   {
