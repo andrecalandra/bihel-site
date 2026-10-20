@@ -770,6 +770,38 @@ body {
   .location__halo { animation: none; opacity: 0.6; }
 }
 
+/* ---------- Instagram no rodapé ---------- */
+.footer .footer__social {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  margin-top: 20px;
+  color: #dfe3f5;
+  font-weight: 600;
+  font-size: 0.92rem;
+  text-decoration: none;
+  transition: color .2s ease;
+}
+.footer__social-icon {
+  display: grid;
+  place-items: center;
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  border: 1.5px solid rgba(255, 255, 255, 0.3);
+  transition: background .25s ease, border-color .25s ease, color .25s ease, transform .25s ease;
+}
+.footer .footer__social-icon svg { width: 22px; height: 22px; fill: none; stroke: currentColor; }
+.footer .footer__social-icon svg circle:last-child { fill: currentColor; stroke: none; }
+.footer .footer__social:hover { color: var(--gold-light); }
+.footer .footer__social:hover .footer__social-icon {
+  background: linear-gradient(135deg, var(--gold-light), var(--gold));
+  border-color: transparent;
+  color: var(--navy-900);
+  transform: translateY(-2px);
+}
+.footer .footer__social:focus-visible { outline: 3px solid var(--gold-light); outline-offset: 4px; border-radius: 999px; }
+
 /* ---------- Páginas de serviço (/<slug>) ---------- */
 .landing a.service-card { text-decoration: none; color: inherit; cursor: pointer; }
 .svc-hero {
