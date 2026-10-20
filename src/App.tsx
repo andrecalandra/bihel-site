@@ -281,7 +281,7 @@ export default function App() {
               <div className="diff-card reveal">
                 <svg viewBox="0 0 24 24"><path d="M5 3h14a1 1 0 0 1 1 1v16l-8-4-8 4V4a1 1 0 0 1 1-1Z" /></svg>
                 <h3>Experiência Comprovada</h3>
-                <p>Mais de 1 milhão de m² e 1 mil apartamentos já vistoriados em Niterói e região.</p>
+                <p>Mais de 1 milhão de m² e 1 mil apartamentos já vistoriados.</p>
               </div>
             </div>
           </div>
