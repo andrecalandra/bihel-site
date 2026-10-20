@@ -14,16 +14,16 @@ const BASE_TEAM: TeamMember[] = [
     img: asset("assets/equipe/gustavo-bihel.webp"),
   },
   {
-    // foto: IMG_0446 (cabelo claro, camisa preta)
-    name: "Ingrid Glória",
-    role: "Trainee de Arquitetura",
-    img: asset("assets/equipe/IMG_0446.webp"),
-  },
-  {
     // foto: IMG_0451 (cabelo liso escuro, camisa preta)
     name: "Kamila Silva",
     role: "Engenheira Civil",
     img: asset("assets/equipe/IMG_0451.webp"),
+  },
+  {
+    // foto: IMG_0446 (cabelo claro, camisa preta)
+    name: "Ingrid Glória",
+    role: "Trainee de Arquitetura",
+    img: asset("assets/equipe/IMG_0446.webp"),
   },
   {
     // foto: IMG_0477 (cabelo ondulado, polo azul)
