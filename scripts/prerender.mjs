@@ -66,7 +66,6 @@ for (const s of SERVICES) {
       description: s.metaDescription,
       url,
       provider: { "@type": "ProfessionalService", name: "Bihel Engenharia", url: `${SITE_URL}/` },
-      areaServed: { "@type": "City", name: "Niterói" },
     }),
     jsonLd({
       "@context": "https://schema.org",
