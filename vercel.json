@@ -12,7 +12,7 @@
       ]
     },
     {
-      "source": "/painel",
+      "source": "/crm-insights",
       "headers": [{ "key": "X-Robots-Tag", "value": "noindex, nofollow" }]
     },
     {

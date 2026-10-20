@@ -12,7 +12,7 @@ para o Google em `bihel-site.vercel.app` (de propósito).
   (`SITE_URL` e `INDEXABLE`).
 - Gera o `sitemap.xml` sozinho a cada build (página inicial + 5 serviços) e liga o `robots.txt` a ele.
 - Redireciona os endereços antigos do WordPress (`/sobre-nos`, `/servicos/...`, `/contato`, `/blog`...) para a página nova (301/308).
-- Mantém `/painel` e `/api/` fora do Google; `/privacidade` continua com `noindex`.
+- Mantém `/crm-insights` e `/api/` fora do Google; `/privacidade` continua com `noindex`.
 - Inclui `scripts/verificar-lancamento.mjs`, que confere tudo depois que o site entrar no ar.
 
 ## Ordem certa (importa!)

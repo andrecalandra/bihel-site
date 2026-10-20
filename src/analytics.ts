@@ -1,6 +1,6 @@
 // Medição de audiência própria: sem cookies, sem identificador salvo no aparelho e
 // sem IP guardado (o servidor transforma o visitante num hash diário). Os números
-// aparecem no painel em /painel. Veja api/collect.js.
+// aparecem no painel em /crm-insights. Veja api/collect.js.
 // Quem clicou em "Recusar" no aviso de cookies não é contado aqui.
 import { getConsent } from "./consent";
 

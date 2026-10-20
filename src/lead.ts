@@ -1,4 +1,4 @@
-// Guarda o pedido de orçamento para a equipe ver no painel (/painel). Roda em paralelo ao
+// Guarda o pedido de orçamento para a equipe ver no painel (/crm-insights). Roda em paralelo ao
 // WhatsApp e nunca atrapalha o envio: se falhar, a pessoa continua sendo atendida normalmente.
 export interface LeadFields {
   name: string;

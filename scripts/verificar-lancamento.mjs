@@ -71,8 +71,8 @@ const nope = await get(`${base}/pagina-que-nao-existe-xyz`);
 check(nope.status === 404, "endereço inexistente responde 404", `endereço inexistente respondeu ${nope.status} (esperado 404)`);
 
 console.log("\nÁreas que não devem aparecer no Google");
-const painel = await get(`${base}/painel`);
-check(painel.status === 200 && /noindex/i.test(painel.headers.get("x-robots-tag") ?? ""), "/painel com noindex", "/painel sem noindex no cabeçalho");
+const painel = await get(`${base}/crm-insights`);
+check(painel.status === 200 && /noindex/i.test(painel.headers.get("x-robots-tag") ?? ""), "/crm-insights com noindex", "/crm-insights sem noindex no cabeçalho");
 const priv = await get(`${base}/privacidade`);
 check(priv.status === 200, "/privacidade abre", `/privacidade respondeu ${priv.status}`);
 const stats = await get(`${base}/api/stats?days=7`);

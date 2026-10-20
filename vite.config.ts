@@ -17,7 +17,7 @@ export default defineConfig({
       input: {
         index: resolve(import.meta.dirname, 'index.html'),
         privacidade: resolve(import.meta.dirname, 'privacidade.html'),
-        painel: resolve(import.meta.dirname, 'painel.html'),
+        'crm-insights': resolve(import.meta.dirname, 'crm-insights.html'),
       },
     },
   },
