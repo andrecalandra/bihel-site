@@ -860,7 +860,7 @@ body {
 .team-card__img { aspect-ratio: 4 / 5; overflow: hidden; background: var(--gray-100); }
 .team-card__img img { width: 100%; height: 100%; object-fit: cover; transition: transform .5s ease; }
 .team-card:hover .team-card__img img { transform: scale(1.05); }
-.team-card__body { position: relative; padding: 26px 22px 28px; }
+.team-card__body { position: relative; padding: 26px 22px 24px; }
 .team-card__body::before {
   content: "";
   position: absolute;
@@ -878,7 +878,6 @@ body {
   letter-spacing: 0.06em;
   text-transform: uppercase;
   color: var(--gold);
-  margin-bottom: 12px;
 }
 .team-card p { color: var(--gray-500); font-size: 0.92rem; line-height: 1.65; }
 

@@ -28,7 +28,6 @@ export default function TeamSection() {
               <div className="team-card__body">
                 <h3>{m.name}</h3>
                 <span className="team-card__role">{m.role}</span>
-                <p>{m.bio}</p>
               </div>
             </article>
           ))}
