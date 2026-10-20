@@ -1,8 +1,6 @@
 import { useEffect, useState } from "react";
 import { asset } from "../asset";
-
-const WHATSAPP_HREF =
-  "https://wa.me/5521993232702?text=Ol%C3%A1!%20Visitei%20o%20site%20da%20Bihel%20Engenharia%20e%20gostaria%20de%20solicitar%20um%20or%C3%A7amento.";
+import { WHATSAPP_HREF } from "../site";
 
 const NAV_LINKS = [
   { href: "#topo", label: "Início" },
@@ -12,7 +10,8 @@ const NAV_LINKS = [
   { href: "#orcamento", label: "Orçamento" },
 ];
 
-export default function SiteHeader() {
+/** `homeHref`: "" na home; "./" nas páginas de serviço (os links viram "./#sobre" etc.). */
+export default function SiteHeader({ homeHref = "" }: { homeHref?: string }) {
   const [isOpen, setIsOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
 
@@ -47,7 +46,7 @@ export default function SiteHeader() {
       }}
     >
       <div className="container header__inner">
-        <a href="#topo" className="logo">
+        <a href={homeHref || "#topo"} className="logo">
           {/* <picture> garante que o navegador baixe só uma das duas imagens
               (nunca as duas), conforme a largura da tela. */}
           <picture>
@@ -95,7 +94,7 @@ export default function SiteHeader() {
             {NAV_LINKS.map((link, i) => (
               <a
                 key={link.href}
-                href={link.href}
+                href={link.href === "#topo" ? homeHref || "#topo" : `${homeHref}${link.href}`}
                 onClick={() => setIsOpen(false)}
                 tabIndex={isOpen ? 0 : -1}
                 style={{ transitionDelay: isOpen ? `${0.08 + i * 0.05}s` : "0s" }}
