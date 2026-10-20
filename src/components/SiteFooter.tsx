@@ -4,6 +4,8 @@ import { SERVICES } from "../services";
 import { HAS_TEAM } from "../team";
 import { ADDRESS_TEXT } from "./LocationSection";
 
+const INSTAGRAM_URL = "https://www.instagram.com/bihel.engenharia/";
+
 /** `homeHref`: "" na própria home; "./" nas páginas de serviço (os links de seção viram "./#sobre" etc.). */
 export default function SiteFooter({ homeHref = "" }: { homeHref?: string }) {
   const h = (hash: string) => `${homeHref}${hash}`;
@@ -23,6 +25,22 @@ export default function SiteFooter({ homeHref = "" }: { homeHref?: string }) {
             Soluções especializadas de engenharia para condomínios e edifícios, com suporte
             técnico transparente do início ao fim.
           </p>
+          <a
+            className="footer__social"
+            href={INSTAGRAM_URL}
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="Instagram da Bihel Engenharia (abre em nova aba)"
+          >
+            <span className="footer__social-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+                <rect x="3" y="3" width="18" height="18" rx="5" />
+                <circle cx="12" cy="12" r="4.2" />
+                <circle cx="17.3" cy="6.7" r="0.6" fill="currentColor" />
+              </svg>
+            </span>
+            @bihel.engenharia
+          </a>
         </div>
 
         <div className="footer__col">
