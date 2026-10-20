@@ -39,6 +39,23 @@ const rbText = await rb.text();
 check(rb.status === 200 && rbText.includes(`Sitemap: ${base}/sitemap.xml`), "robots.txt aponta para o sitemap", "robots.txt sem a linha Sitemap");
 check(!/Disallow:\s*\/\s*$/m.test(rbText), "robots.txt não bloqueia o site todo", "robots.txt bloqueia tudo (Disallow: /)");
 
+console.log("\nPáginas dos serviços (listadas no sitemap)");
+const pageUrls = [...smText.matchAll(/<loc>([^<]+)<\/loc>/g)].map((m) => m[1]).filter((u) => u !== `${base}/`);
+check(pageUrls.length >= 5, `${pageUrls.length} páginas de serviço no sitemap`, `só ${pageUrls.length} páginas de serviço no sitemap (esperado 5)`);
+for (const url of pageUrls) {
+  const name = url.replace(`${base}/`, "/");
+  const r = await get(url.replace(base, base));
+  const page = await r.text();
+  const header = r.headers.get("x-robots-tag") ?? "";
+  const okPage =
+    r.status === 200 &&
+    !/noindex/i.test(header) &&
+    !/<meta[^>]+name="robots"[^>]+noindex/i.test(page) &&
+    page.includes(`<link rel="canonical" href="${url}"`) &&
+    /<h1[^>]*>[^<]+<\/h1>/.test(page);
+  check(okPage, `${name}: abre, canonical certo, com título H1 e sem bloqueio`, `${name}: problema (status ${r.status}, ${header || "sem cabeçalho"})`);
+}
+
 console.log("\nRedirecionamentos dos endereços antigos");
 for (const [from, to] of [
   ["/sobre-nos", "/#sobre"],

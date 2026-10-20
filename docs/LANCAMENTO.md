@@ -6,7 +6,11 @@ para o Google em `bihel-site.vercel.app` (de propósito).
 ## O que a branch `lancamento` muda
 - Remove o bloqueio de indexação (`noindex`) do HTML e do cabeçalho do servidor.
 - Troca canonical, `og:url`, imagens de compartilhamento e dados estruturados para `https://www.bihel.com.br`.
-- Cria `public/sitemap.xml` e liga o `robots.txt` a ele.
+- Libera para o Google as **5 páginas dos serviços** (`/autovistoria-predial-niteroi`, `/inspecao-fachada-drone-niteroi`,
+  `/gestao-fiscalizacao-obras-niteroi`, `/projetos-personalizados-niteroi`, `/consultoria-engenharia-condominial-niteroi`).
+  Elas já existem hoje em `bihel-site.vercel.app`, bloqueadas como o resto do site. O interruptor está em `src/site.ts`
+  (`SITE_URL` e `INDEXABLE`).
+- Gera o `sitemap.xml` sozinho a cada build (página inicial + 5 serviços) e liga o `robots.txt` a ele.
 - Redireciona os endereços antigos do WordPress (`/sobre-nos`, `/servicos/...`, `/contato`, `/blog`...) para a página nova (301/308).
 - Mantém `/painel` e `/api/` fora do Google; `/privacidade` continua com `noindex`.
 - Inclui `scripts/verificar-lancamento.mjs`, que confere tudo depois que o site entrar no ar.
@@ -34,7 +38,8 @@ para o Google em `bihel-site.vercel.app` (de propósito).
    O Google pede para criar um registro TXT no DNS. Se preferir não mexer no DNS, escolha *Prefixo do URL*
    `https://www.bihel.com.br/` e me mande a tag `<meta name="google-site-verification" ...>` que eu coloco no site.
 2. **Sitemaps** → envie `https://www.bihel.com.br/sitemap.xml`.
-3. **Inspeção de URL** → cole `https://www.bihel.com.br/` → **Solicitar indexação**.
+3. **Inspeção de URL** → cole `https://www.bihel.com.br/` → **Solicitar indexação**. Repita com as 5 páginas de serviço
+   (o Google limita a poucos pedidos por dia; se não aceitar todos, faça o resto no dia seguinte).
 4. Perfil da Empresa no Google (Google Meu Negócio): confira se o site cadastrado é `https://www.bihel.com.br`.
 5. Em **Páginas** (Indexação), depois de alguns dias, veja se aparece algum endereço antigo com erro 404. Me mande a lista
    que eu incluo os redirecionamentos que faltarem.
@@ -42,8 +47,9 @@ para o Google em `bihel-site.vercel.app` (de propósito).
 ## Quanto tempo leva?
 - Busca pelo nome "Bihel Engenharia": normalmente alguns dias após o pedido de indexação.
 - Buscas como "autovistoria Niterói" e "inspeção predial Niterói": de semanas a meses. Não dá para prometer posição.
-- O site novo tem uma página só (mais a política de privacidade). Para ganhar mais presença no Google, o próximo passo
-  é criar **uma página para cada serviço** (por exemplo "Autovistoria Predial em Niterói").
+- Cada serviço tem agora a sua própria página, o que dá ao Google um motivo para mostrar o site em buscas como
+  "autovistoria predial Niterói". Próximos passos de SEO: pedir avaliações no Perfil da Empresa, conseguir links de
+  administradoras/condomínios parceiros e, se fizer sentido, criar um blog com perguntas frequentes de síndicos.
 
 ## Se algo der errado
 - Voltar atrás é simples: reverter o merge na `main` (a Vercel republica em ~1 minuto).
