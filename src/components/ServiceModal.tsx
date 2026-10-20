@@ -2,6 +2,7 @@ import { useEffect } from "react";
 
 export type ServiceModalData = {
   title: string;
+  slug: string;
   details: string;
   img: string;
 };
@@ -54,9 +55,9 @@ export default function ServiceModal({
         </div>
 
         <div className="service-modal__footer">
-          <button className="btn btn--ghost" onClick={onClose}>
-            Fechar
-          </button>
+          <a className="btn btn--ghost" href={`./${service.slug}`}>
+            Ver página completa
+          </a>
           <button
             className="btn btn--primary"
             onClick={() => onRequestQuote(service.title)}
