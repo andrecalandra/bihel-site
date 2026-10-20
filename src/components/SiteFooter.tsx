@@ -20,8 +20,8 @@ export default function SiteFooter({ homeHref = "" }: { homeHref?: string }) {
             loading="lazy"
           />
           <p>
-            Soluções especializadas de engenharia para condomínios e edifícios em Niterói e
-            região, com suporte técnico transparente do início ao fim.
+            Soluções especializadas de engenharia para condomínios e edifícios, com suporte
+            técnico transparente do início ao fim.
           </p>
         </div>
 

@@ -32,7 +32,7 @@ export default function LocationSection({ whatsappHref }: { whatsappHref: string
         <div className="section-head reveal">
           <span className="section-tag">Onde estamos</span>
           <h2>Venha nos visitar</h2>
-          <p>Estamos em Santa Rosa, Niterói, e atendemos condomínios e edifícios de toda a região.</p>
+          <p>Nosso escritório fica em Santa Rosa, Niterói. Atendemos condomínios e edifícios de outras localidades também: fale conosco.</p>
         </div>
 
         <div className="location__box reveal">
@@ -79,7 +79,7 @@ export default function LocationSection({ whatsappHref }: { whatsappHref: string
             </span>
             <h3>Bihel Engenharia</h3>
             <address>{ADDRESS_TEXT}</address>
-            <p className="location__hint">Atendimento presencial e visitas técnicas em Niterói e região.</p>
+            <p className="location__hint">Atendimento presencial e visitas técnicas. Para outras localidades, fale conosco.</p>
             <div className="location__actions">
               <a className="btn btn--primary" href={DIRECTIONS_URL} target="_blank" rel="noopener noreferrer">
                 Como chegar

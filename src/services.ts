@@ -9,10 +9,10 @@ import { asset } from "./asset";
 export const SERVICES = [
   {
     title: "Autovistoria Predial",
-    slug: "autovistoria-predial-niteroi",
-    pageTitle: "Autovistoria Predial em Niterói e Região | Bihel Engenharia",
-    h1: "Autovistoria Predial em Niterói",
-    metaDescription: "Laudo de autovistoria predial em Niterói e região, em conformidade com a Lei 6.400/2013 do RJ. Vistoria técnica, laudo e suporte pós-laudo. Peça orçamento.",
+    slug: "autovistoria-predial",
+    pageTitle: "Autovistoria Predial | Laudo Lei 6.400/2013 | Bihel Engenharia",
+    h1: "Autovistoria Predial",
+    metaDescription: "Laudo de autovistoria predial em conformidade com a Lei 6.400/2013 do RJ. Vistoria técnica, laudo e suporte pós-laudo. Peça orçamento.",
     lead: "Laudo de autovistoria em conformidade com a Lei 6.400/2013 do Rio de Janeiro, com vistoria técnica completa e suporte depois da entrega do laudo.",
     desc: "Laudo de autovistoria predial em conformidade com a Lei 6.400/2013 do estado do Rio de Janeiro.",
     details: `Na Bihel Engenharia, oferecemos serviços especializados na realização de Laudos de Autovistoria, atendendo plenamente às exigências da Lei 6.400/2013 do estado do Rio de Janeiro e às leis municipais complementares. Nosso compromisso é garantir a segurança e a conformidade legal das edificações, proporcionando tranquilidade aos proprietários e gestores de imóveis.
