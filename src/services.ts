@@ -59,10 +59,10 @@ Garanta a segurança da sua edificação e a conformidade com a legislação. En
   },
   {
     title: "Inspeção de Fachada com Drone",
-    slug: "inspecao-fachada-drone-niteroi",
-    pageTitle: "Inspeção de Fachada com Drone em Niterói | Bihel Engenharia",
-    h1: "Inspeção de Fachada com Drone em Niterói",
-    metaDescription: "Inspeção de fachada com drone e câmera termográfica em Niterói: identifica infiltrações e descolamentos sem andaimes, com relatório técnico com imagens.",
+    slug: "inspecao-fachada-drone",
+    pageTitle: "Inspeção de Fachada com Drone e Termografia | Bihel Engenharia",
+    h1: "Inspeção de Fachada com Drone",
+    metaDescription: "Inspeção de fachada com drone e câmera termográfica: identifica infiltrações e descolamentos sem andaimes, com relatório técnico com imagens. Peça orçamento.",
     lead: "Drone com câmera termográfica para identificar infiltrações, descolamentos e outras manifestações patológicas na fachada, de forma rápida e sem intervenção na edificação.",
     desc: "Inspeção de fachada com drone e câmera termográfica: identificação rápida e não invasiva de manifestações patológicas.",
     details: `Na Bihel Engenharia, utilizamos drones equipados com câmeras termográficas para realizar inspeções detalhadas de fachadas, unindo tecnologia de ponta a décadas de experiência técnica em engenharia predial.
