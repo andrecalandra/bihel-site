@@ -169,3 +169,23 @@ test("lead: consulta leve (peek) avisa quando chega ou sai lead", async () => {
   assert.notEqual(b.latest, a.latest);
   assert.equal((await leadsApi("GET", { query: "?peek=1", senha: "errada" })).status, 401);
 });
+
+test("banco: reconhece as variáveis da Vercel com prefixo (ex.: bihel_KV_REST_API_URL) e ignora o token somente-leitura", async () => {
+  const { storeConfigured } = await import("../api/_lib.js");
+  const saved = process.env.VERCEL;
+  process.env.VERCEL = "1"; // em produção, sem banco configurado o painel avisa
+  try {
+    assert.equal(storeConfigured(), false);
+    process.env.bihel_KV_REST_API_URL = "https://exemplo.upstash.io";
+    process.env.bihel_KV_REST_API_READ_ONLY_TOKEN = "somente-leitura";
+    assert.equal(storeConfigured(), false, "o token somente-leitura não basta");
+    process.env.bihel_KV_REST_API_TOKEN = "token-de-escrita";
+    assert.equal(storeConfigured(), true);
+  } finally {
+    delete process.env.bihel_KV_REST_API_URL;
+    delete process.env.bihel_KV_REST_API_TOKEN;
+    delete process.env.bihel_KV_REST_API_READ_ONLY_TOKEN;
+    if (saved === undefined) delete process.env.VERCEL;
+    else process.env.VERCEL = saved;
+  }
+});

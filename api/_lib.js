@@ -13,8 +13,17 @@ export function lastDays(n, endTs = Date.now()) {
 }
 
 // ---------- armazenamento (Redis REST da Upstash, via integração da Vercel) ----------
-const REST_URL = () => process.env.UPSTASH_REDIS_REST_URL || process.env.KV_REST_API_URL;
-const REST_TOKEN = () => process.env.UPSTASH_REDIS_REST_TOKEN || process.env.KV_REST_API_TOKEN;
+// Aceita os nomes padrão e também os da integração da Vercel com prefixo (ex.: bihel_KV_REST_API_URL),
+// que é o que aparece quando o banco é conectado com "Custom Prefix". Nunca usa o token somente-leitura.
+function envBySuffix(...names) {
+  for (const n of names) if (process.env[n]) return process.env[n];
+  for (const [key, value] of Object.entries(process.env)) {
+    if (value && names.some((n) => key.endsWith(`_${n}`))) return value;
+  }
+  return undefined;
+}
+const REST_URL = () => envBySuffix("UPSTASH_REDIS_REST_URL", "KV_REST_API_URL");
+const REST_TOKEN = () => envBySuffix("UPSTASH_REDIS_REST_TOKEN", "KV_REST_API_TOKEN");
 
 /** Em produção sem Redis configurado não há onde guardar nada. */
 export const storeConfigured = () => Boolean(REST_URL() && REST_TOKEN()) || !process.env.VERCEL;
