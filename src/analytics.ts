@@ -5,7 +5,7 @@
 import { getConsent } from "./consent";
 
 const OPT_OUT_KEY = "bihel_sem_registro";
-const HOSTS = ["bihel-site.vercel.app", "www.bihel.com.br", "bihel.com.br"];
+const HOSTS = ["bihel-site.vercel.app", "site-bihel.vercel.app", "www.bihel.com.br", "bihel.com.br"];
 
 const SECTIONS = ["sobre", "servicos", "diferenciais", "equipe", "depoimentos", "orcamento", "localizacao"];
 

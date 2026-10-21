@@ -163,7 +163,7 @@ export function cleanLabel(value, max = 60) {
     .slice(0, max);
 }
 
-const OWN_HOSTS = ["bihel-site.vercel.app", "bihel.com.br", "www.bihel.com.br"];
+const OWN_HOSTS = ["bihel-site.vercel.app", "site-bihel.vercel.app", "bihel.com.br", "www.bihel.com.br"];
 export function classifySource(referrer, utmSource) {
   const utm = cleanLabel(utmSource, 40).toLowerCase();
   let host = "";
@@ -200,7 +200,7 @@ export function cityOf(req) {
 }
 
 export function allowedHosts() {
-  return (process.env.ANALYTICS_HOSTS || "bihel-site.vercel.app,www.bihel.com.br,bihel.com.br,localhost")
+  return (process.env.ANALYTICS_HOSTS || "bihel-site.vercel.app,site-bihel.vercel.app,www.bihel.com.br,bihel.com.br,localhost")
     .split(",")
     .map((h) => h.trim().toLowerCase())
     .filter(Boolean);
