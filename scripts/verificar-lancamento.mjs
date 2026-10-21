@@ -62,6 +62,9 @@ for (const [from, to] of [
   ["/servicos/inspecao-predial", "/#servicos"],
   ["/contato", "/#orcamento"],
   ["/blog", "/"],
+  ["/avaliacoes/maria-esperanza", "/#depoimentos"],
+  ["/category/noticias", "/"],
+  ["/page-sitemap.xml", "/sitemap.xml"],
 ]) {
   const r = await get(`${base}${from}`);
   const loc = r.headers.get("location") ?? "";

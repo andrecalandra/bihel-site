@@ -39,6 +39,18 @@
     { "source": "/fale-conosco", "destination": "/#orcamento", "permanent": true },
     { "source": "/blog", "destination": "/", "permanent": true },
     { "source": "/blog/:path*", "destination": "/", "permanent": true },
-    { "source": "/feed", "destination": "/", "permanent": true }
+    { "source": "/feed", "destination": "/", "permanent": true },
+    { "source": "/avaliacoes", "destination": "/#depoimentos", "permanent": true },
+    { "source": "/avaliacoes/:path*", "destination": "/#depoimentos", "permanent": true },
+    { "source": "/avaliacao/:path*", "destination": "/#depoimentos", "permanent": true },
+    { "source": "/noticias", "destination": "/", "permanent": true },
+    { "source": "/noticias/:path*", "destination": "/", "permanent": true },
+    { "source": "/category/:path*", "destination": "/", "permanent": true },
+    { "source": "/tag/:path*", "destination": "/", "permanent": true },
+    { "source": "/author/:path*", "destination": "/", "permanent": true },
+    { "source": "/page-sitemap.xml", "destination": "/sitemap.xml", "permanent": true },
+    { "source": "/post-sitemap.xml", "destination": "/sitemap.xml", "permanent": true },
+    { "source": "/sitemap_index.xml", "destination": "/sitemap.xml", "permanent": true },
+    { "source": "/wp-sitemap.xml", "destination": "/sitemap.xml", "permanent": true }
   ]
 }
