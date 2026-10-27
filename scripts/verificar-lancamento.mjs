@@ -59,7 +59,7 @@ for (const url of pageUrls) {
 console.log("\nRedirecionamentos dos endereços antigos");
 for (const [from, to] of [
   ["/sobre-nos", "/#sobre"],
-  ["/servicos/inspecao-predial", "/#servicos"],
+  ["/servicos/inspecao-predial", "/autovistoria-predial"],
   ["/contato", "/#orcamento"],
   ["/blog", "/"],
   ["/avaliacoes/maria-esperanza", "/#depoimentos"],

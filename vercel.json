@@ -54,6 +54,7 @@
     { "source": "/blog", "destination": "/", "permanent": true },
     { "source": "/blog/:path*", "destination": "/", "permanent": true },
     { "source": "/feed", "destination": "/", "permanent": true },
+    { "source": "/post-slides/:path*", "destination": "/", "permanent": true },
     { "source": "/avaliacoes", "destination": "/#depoimentos", "permanent": true },
     { "source": "/avaliacoes/:path*", "destination": "/#depoimentos", "permanent": true },
     { "source": "/avaliacao/:path*", "destination": "/#depoimentos", "permanent": true },
