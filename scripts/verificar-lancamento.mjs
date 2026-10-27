@@ -63,6 +63,7 @@ for (const [from, to] of [
   ["/contato", "/#orcamento"],
   ["/blog", "/"],
   ["/avaliacoes/maria-esperanza", "/#depoimentos"],
+  ["/avaliacoes/", "/avaliacoes"], // o WordPress antigo usava barra no fim
   ["/category/noticias", "/"],
   ["/page-sitemap.xml", "/sitemap.xml"],
 ]) {
