@@ -177,9 +177,9 @@ Na Bihel Engenharia, não apenas elaboramos projetos, mas criamos soluções que
   {
     title: "Consultoria em Engenharia Condominial",
     slug: "consultoria-engenharia-condominial",
-    pageTitle: "Consultoria em Engenharia Condominial | Bihel Engenharia",
-    h1: "Consultoria em Engenharia Condominial",
-    metaDescription: "Consultoria em engenharia condominial: suporte mensal à gestão, programa de manutenção (NBR 5.674), laudos de recebimento e de garantia de obras. Peça orçamento.",
+    pageTitle: "Consultoria Técnica para Condomínios | Engenharia Condominial | Bihel",
+    h1: "Consultoria Técnica em Engenharia Condominial",
+    metaDescription: "Consultoria técnica para condomínios: suporte mensal à gestão, programa de manutenção (NBR 5.674), laudos de recebimento e de garantia de obras. Peça orçamento.",
     lead: "Suporte técnico contínuo para síndicos, administradoras e proprietários: gestão, plano de manutenção, laudos de recebimento e de garantia de obras.",
     desc: "Consultoria em engenharia condominial para síndicos, administradores e proprietários de imóveis.",
     details: `Na Bihel Engenharia, oferecemos uma gama abrangente de serviços de consultoria técnica, projetados para atender às necessidades específicas de síndicos, administradores e proprietários de imóveis. Nossa expertise técnica e abordagem inovadora garantem soluções eficazes e personalizadas para cada cliente.
